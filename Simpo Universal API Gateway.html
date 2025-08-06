@@ -1,0 +1,954 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Simpo - One API for Africa's Digital Infrastructure</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, system-ui, sans-serif;
+            line-height: 1.6;
+            color: #0A2540;
+            background: #ffffff;
+            font-size: 16px;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 24px;
+        }
+        
+        /* Header - Stripe Style */
+        header {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid #E3E8EE;
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 100;
+            transition: all 0.2s ease;
+        }
+        
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            height: 80px;
+        }
+        
+        .logo {
+            font-size: 24px;
+            font-weight: 600;
+            color: #0A2540;
+            text-decoration: none;
+            letter-spacing: -0.02em;
+        }
+        
+        .nav-links {
+            display: flex;
+            gap: 32px;
+            list-style: none;
+            align-items: center;
+        }
+        
+        .nav-links a {
+            color: #425466;
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 15px;
+            transition: color 0.15s ease;
+        }
+        
+        .nav-links a:hover {
+            color: #0A2540;
+        }
+        
+        .nav-cta {
+            background: #635BFF;
+            color: white !important;
+            padding: 8px 16px;
+            border-radius: 6px;
+            font-weight: 500;
+            transition: all 0.15s ease;
+        }
+        
+        .nav-cta:hover {
+            background: #5A52E8;
+            transform: translateY(-1px);
+        }
+        
+        /* Hero Section - Stripe Style */
+        .hero {
+            padding: 160px 0 120px;
+            background: linear-gradient(150deg, #ffffff 15%, #f8fafc 70%, #f1f5f9 94%);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: radial-gradient(ellipse 80% 50% at 50% -20%, rgba(99, 91, 255, 0.15), transparent 60%);
+            pointer-events: none;
+        }
+        
+        /* Integration Artwork */
+        .integration-artwork {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            pointer-events: none;
+            opacity: 0.4;
+            overflow: hidden;
+        }
+        
+        .connection-line {
+            position: absolute;
+            background: linear-gradient(90deg, transparent, rgba(99, 91, 255, 0.3), transparent);
+            animation: pulse 3s ease-in-out infinite;
+        }
+        
+        .api-node {
+            position: absolute;
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #635BFF, #7C3AED);
+            box-shadow: 0 0 20px rgba(99, 91, 255, 0.4);
+            animation: glow 2s ease-in-out infinite alternate;
+        }
+        
+        .api-node.large {
+            width: 16px;
+            height: 16px;
+            background: linear-gradient(135deg, #10B981, #059669);
+            box-shadow: 0 0 25px rgba(16, 185, 129, 0.5);
+        }
+        
+        .floating-icon {
+            position: absolute;
+            font-size: 18px;
+            color: rgba(99, 91, 255, 0.2);
+            animation: float 4s ease-in-out infinite;
+        }
+        
+        .code-snippet {
+            position: absolute;
+            font-family: 'Monaco', 'Menlo', monospace;
+            font-size: 10px;
+            color: rgba(66, 84, 102, 0.3);
+            font-weight: 400;
+            letter-spacing: 0.5px;
+        }
+        
+        @keyframes pulse {
+            0%, 100% { opacity: 0.3; }
+            50% { opacity: 0.8; }
+        }
+        
+        @keyframes glow {
+            0% { 
+                transform: scale(1);
+                box-shadow: 0 0 20px rgba(99, 91, 255, 0.4);
+            }
+            100% { 
+                transform: scale(1.1);
+                box-shadow: 0 0 30px rgba(99, 91, 255, 0.6);
+            }
+        }
+        
+        @keyframes float {
+            0%, 100% { transform: translateY(0px) rotate(0deg); }
+            25% { transform: translateY(-10px) rotate(2deg); }
+            50% { transform: translateY(-5px) rotate(0deg); }
+            75% { transform: translateY(-15px) rotate(-2deg); }
+        }
+        
+        .hero-content {
+            text-align: center;
+            position: relative;
+            z-index: 2;
+        }
+        
+        .hero h1 {
+            font-size: 72px;
+            font-weight: 600;
+            margin-bottom: 24px;
+            line-height: 1.1;
+            letter-spacing: -0.025em;
+            color: #0A2540;
+            max-width: 900px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        
+        .hero-subtitle {
+            font-size: 21px;
+            color: #425466;
+            margin-bottom: 40px;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+            font-weight: 400;
+            line-height: 1.5;
+        }
+        
+        .hero-cta {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: #635BFF;
+            color: white;
+            padding: 14px 24px;
+            border-radius: 6px;
+            font-weight: 500;
+            text-decoration: none;
+            font-size: 16px;
+            transition: all 0.15s ease;
+            box-shadow: 0 4px 14px 0 rgba(99, 91, 255, 0.2);
+        }
+        
+        .hero-cta:hover {
+            background: #5A52E8;
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px 0 rgba(99, 91, 255, 0.3);
+        }
+        
+        /* Section Styling */
+        .section {
+            padding: 120px 0;
+        }
+        
+        .section-header {
+            text-align: center;
+            margin-bottom: 80px;
+        }
+        
+        .section-header h2 {
+            font-size: 48px;
+            font-weight: 600;
+            margin-bottom: 16px;
+            color: #0A2540;
+            letter-spacing: -0.025em;
+            line-height: 1.2;
+        }
+        
+        .section-header p {
+            font-size: 20px;
+            color: #425466;
+            max-width: 640px;
+            margin: 0 auto;
+            line-height: 1.5;
+        }
+        
+        /* Problem Section */
+        .problem {
+            background: linear-gradient(150deg, #f8fafc 15%, #ffffff 70%, #f8fafc 94%);
+        }
+        
+        .problem-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 32px;
+        }
+        
+        .problem-card {
+            background: white;
+            padding: 40px 32px;
+            border-radius: 12px;
+            border: 1px solid #E3E8EE;
+            transition: all 0.15s ease;
+            position: relative;
+        }
+        
+        .problem-card:hover {
+            border-color: #C7D2FE;
+            box-shadow: 0 8px 32px rgba(99, 91, 255, 0.08);
+            transform: translateY(-2px);
+        }
+        
+        .problem-card h3 {
+            font-size: 20px;
+            font-weight: 600;
+            margin-bottom: 12px;
+            color: #0A2540;
+            letter-spacing: -0.01em;
+        }
+        
+        .problem-card p {
+            color: #425466;
+            line-height: 1.6;
+            font-size: 16px;
+        }
+        
+        /* How It Works */
+        .how-it-works-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 64px;
+            max-width: 900px;
+            margin: 0 auto;
+        }
+        
+        .step {
+            text-align: center;
+        }
+        
+        .step-number {
+            width: 56px;
+            height: 56px;
+            background: linear-gradient(135deg, #635BFF, #7C3AED);
+            color: white;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+            font-size: 20px;
+            margin: 0 auto 24px;
+        }
+        
+        .step h3 {
+            font-size: 20px;
+            font-weight: 600;
+            margin-bottom: 12px;
+            color: #0A2540;
+            letter-spacing: -0.01em;
+        }
+        
+        .step p {
+            color: #425466;
+            line-height: 1.6;
+        }
+        
+        /* Features Section */
+        .features {
+            background: linear-gradient(150deg, #ffffff 15%, #f8fafc 70%, #ffffff 94%);
+        }
+        
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 40px;
+        }
+        
+        .feature-card {
+            background: white;
+            padding: 40px;
+            border-radius: 12px;
+            border: 1px solid #E3E8EE;
+            transition: all 0.15s ease;
+        }
+        
+        .feature-card:hover {
+            border-color: #C7D2FE;
+            box-shadow: 0 8px 32px rgba(99, 91, 255, 0.08);
+            transform: translateY(-2px);
+        }
+        
+        .feature-icon {
+            width: 48px;
+            height: 48px;
+            background: linear-gradient(135deg, #635BFF, #7C3AED);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: bottom 10%;
+            float: left;
+            margin: left 5%;
+            font-size: 20px;
+            color: white;
+        }
+        
+        .feature-card h3 {
+            font-size: 20px;
+            font-weight: 600;
+            margin-bottom: 12px;
+            color: #0A2540;
+            letter-spacing: -0.01em;
+        }
+        
+        .feature-card p {
+            color: #425466;
+            line-height: 1.6;
+        }
+        
+        /* Audience Section */
+        .audience-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 32px;
+        }
+        
+        .audience-card {
+            background: white;
+            padding: 32px;
+            border-radius: 12px;
+            border: 1px solid #E3E8EE;
+            text-align: center;
+            transition: all 0.15s ease;
+        }
+        
+        .audience-card:hover {
+            border-color: #C7D2FE;
+            transform: translateY(-2px);
+            box-shadow: 0 8px 32px rgba(99, 91, 255, 0.08);
+        }
+        
+        .audience-card h3 {
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: 8px;
+            color: #0A2540;
+            letter-spacing: -0.01em;
+        }
+        
+        .audience-card p {
+            color: #425466;
+            font-size: 14px;
+            line-height: 1.5;
+        }
+        
+        /* Why Different */
+        .why-different {
+            background: linear-gradient(150deg, #f8fafc 15%, #ffffff 70%, #f8fafc 94%);
+        }
+        
+        .differentiators {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 48px;
+        }
+        
+        .diff-card {
+            text-align: center;
+        }
+        
+        .diff-icon {
+            width: 72px;
+            height: 72px;
+            background: linear-gradient(135deg, #10B981, #059669);
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 24px;
+            font-size: 28px;
+            color: white;
+        }
+        
+        .diff-card h3 {
+            font-size: 24px;
+            font-weight: 600;
+            margin-bottom: 12px;
+            color: #0A2540;
+            letter-spacing: -0.01em;
+        }
+        
+        .diff-card p {
+            color: #425466;
+            line-height: 1.6;
+            font-size: 16px;
+        }
+        
+        /* Final CTA */
+        .final-cta {
+            background: linear-gradient(135deg, #0A2540 0%, #1A365D 100%);
+            color: white;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .final-cta::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: radial-gradient(ellipse 70% 40% at 50% 0%, rgba(99, 91, 255, 0.15), transparent 70%);
+            pointer-events: none;
+        }
+        
+        .final-cta .container {
+            position: relative;
+            z-index: 2;
+        }
+        
+        .final-cta h2 {
+            font-size: 48px;
+            font-weight: 600;
+            margin-bottom: 16px;
+            letter-spacing: -0.025em;
+            line-height: 1.2;
+        }
+        
+        .final-cta p {
+            font-size: 20px;
+            margin-bottom: 40px;
+            opacity: 0.9;
+            color: #CBD5E1;
+        }
+        
+        .cta-buttons {
+            display: flex;
+            gap: 16px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+        
+        .cta-primary-alt {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: white;
+            color: #0A2540;
+            padding: 14px 24px;
+            border-radius: 6px;
+            font-weight: 500;
+            text-decoration: none;
+            font-size: 16px;
+            transition: all 0.15s ease;
+        }
+        
+        .cta-primary-alt:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(255, 255, 255, 0.2);
+        }
+        
+        .cta-secondary {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: transparent;
+            color: white;
+            padding: 14px 24px;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            border-radius: 6px;
+            font-weight: 500;
+            text-decoration: none;
+            font-size: 16px;
+            transition: all 0.15s ease;
+        }
+        
+        .cta-secondary:hover {
+            background: rgba(255, 255, 255, 0.1);
+            border-color: rgba(255, 255, 255, 0.5);
+            transform: translateY(-1px);
+        }
+        
+        /* Code Block Styling (Stripe-inspired) */
+        .code-preview {
+            background: #0F172A;
+            border-radius: 12px;
+            padding: 24px;
+            margin: 40px auto;
+            max-width: 600px;
+            font-family: 'Monaco', 'Menlo', monospace;
+            font-size: 14px;
+            color: #E2E8F0;
+            border: 1px solid #1E293B;
+        }
+        
+        .code-line {
+            margin-bottom: 4px;
+        }
+        
+        .code-comment {
+            color: #64748B;
+        }
+        
+        .code-string {
+            color: #34D399;
+        }
+        
+        .code-keyword {
+            color: #60A5FA;
+        }
+        
+        /* Responsive Design */
+        @media (max-width: 1024px) {
+            .features-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .how-it-works-grid {
+                grid-template-columns: 1fr;
+                gap: 40px;
+            }
+            
+            .differentiators {
+                grid-template-columns: 1fr;
+                gap: 40px;
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .hero h1 {
+                font-size: 48px;
+            }
+            
+            .hero-subtitle {
+                font-size: 18px;
+            }
+            
+            .section-header h2 {
+                font-size: 36px;
+            }
+            
+            .nav-links {
+                display: none;
+            }
+            
+            .audience-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .problem-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .container {
+                padding: 0 16px;
+            }
+            
+            .section {
+                padding: 80px 0;
+            }
+            
+            .cta-buttons {
+                flex-direction: column;
+                align-items: center;
+            }
+        }
+        
+        /* Subtle animations */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        .fade-in {
+            opacity: 0;
+            animation: fadeInUp 0.6s ease-out forwards;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <nav class="container">
+            <a href="#" class="logo">Simpo</a>
+            <ul class="nav-links">
+                <li><a href="#features">Features</a></li>
+                <li><a href="#how-it-works">How It Works</a></li>
+                <li><a href="#developers">Developers</a></li>
+                <li><a href="#pricing">Pricing</a></li>
+                <li><a href="#" class="nav-cta">Get started</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <section class="hero">
+        <!-- Integration Artwork Background -->
+        <div class="integration-artwork">
+            <!-- Connection Lines -->
+            <div class="connection-line" style="top: 20%; left: 10%; width: 200px; height: 2px; transform: rotate(25deg); animation-delay: 0s;"></div>
+            <div class="connection-line" style="top: 35%; right: 15%; width: 150px; height: 1px; transform: rotate(-15deg); animation-delay: 1s;"></div>
+            <div class="connection-line" style="top: 60%; left: 20%; width: 180px; height: 1px; transform: rotate(45deg); animation-delay: 2s;"></div>
+            <div class="connection-line" style="bottom: 25%; right: 25%; width: 120px; height: 2px; transform: rotate(-30deg); animation-delay: 0.5s;"></div>
+            <div class="connection-line" style="top: 45%; left: 50%; width: 100px; height: 1px; transform: rotate(60deg); animation-delay: 1.5s;"></div>
+            
+            <!-- API Nodes -->
+            <div class="api-node large" style="top: 18%; left: 12%; animation-delay: 0s;"></div>
+            <div class="api-node" style="top: 32%; right: 18%; animation-delay: 0.3s;"></div>
+            <div class="api-node" style="top: 55%; left: 25%; animation-delay: 0.6s;"></div>
+            <div class="api-node large" style="bottom: 28%; right: 20%; animation-delay: 0.9s;"></div>
+            <div class="api-node" style="top: 40%; left: 8%; animation-delay: 1.2s;"></div>
+            <div class="api-node" style="top: 25%; left: 75%; animation-delay: 1.5s;"></div>
+            <div class="api-node" style="bottom: 40%; left: 15%; animation-delay: 1.8s;"></div>
+            <div class="api-node large" style="top: 50%; right: 10%; animation-delay: 2.1s;"></div>
+            
+            <!-- Floating Icons -->
+            <div class="floating-icon" style="top: 15%; left: 25%; animation-delay: 0s;">💳</div>
+            <div class="floating-icon" style="top: 30%; right: 30%; animation-delay: 1s;">💬</div>
+            <div class="floating-icon" style="bottom: 35%; left: 30%; animation-delay: 2s;">🛡️</div>
+            <div class="floating-icon" style="top: 45%; right: 25%; animation-delay: 3s;">📊</div>
+            <div class="floating-icon" style="bottom: 45%; right: 35%; animation-delay: 1.5s;">🧠</div>
+            <div class="floating-icon" style="top: 65%; left: 15%; animation-delay: 2.5s;">⚡</div>
+            
+            <!-- Code Snippets -->
+            <div class="code-snippet" style="top: 25%; left: 35%; animation-delay: 0s;">GET /api/payments</div>
+            <div class="code-snippet" style="bottom: 30%; right: 40%; animation-delay: 1s;">POST /api/sms</div>
+            <div class="code-snippet" style="top: 50%; left: 5%; animation-delay: 2s;">"status": "success"</div>
+            <div class="code-snippet" style="top: 40%; right: 35%; animation-delay: 1.5s;">X-API-Key: simpo_***</div>
+            <div class="code-snippet" style="bottom: 50%; left: 40%; animation-delay: 2.5s;">{ "unified": true }</div>
+        </div>
+        
+        <div class="container">
+            <div class="hero-content">
+                <h1>One API for Africa's digital infrastructure</h1>
+                <p class="hero-subtitle">Connect to payments, SMS, fraud detection, credit scoring, and more with a single integration. Build faster, scale smarter across African markets.</p>
+                <a href="#" class="hero-cta">
+                    Start building
+                    <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor">
+                        <path d="M8.22 2.97a.75.75 0 011.06 0l4.25 4.25a.75.75 0 010 1.06l-4.25 4.25a.75.75 0 01-1.06-1.06L11.44 8.5H2.75a.75.75 0 010-1.5h8.69L8.22 4.03a.75.75 0 010-1.06z"/>
+                    </svg>
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <section class="section problem">
+        <div class="container">
+            <div class="section-header">
+                <h2>The problem with African infrastructure</h2>
+                <p>Building in African markets means juggling dozens of APIs, managing multiple relationships, and dealing with inconsistent documentation.</p>
+            </div>
+            <div class="problem-grid">
+                <div class="problem-card">
+                    <h3>Fragmented infrastructure</h3>
+                    <p>Every service requires its own integration, API keys, and documentation. What should take days takes months.</p>
+                </div>
+                <div class="problem-card">
+                    <h3>Inconsistent quality</h3>
+                    <p>Unreliable uptime, poor documentation, and varying API standards slow down your development cycle.</p>
+                </div>
+                <div class="problem-card">
+                    <h3>High integration costs</h3>
+                    <p>Each new market means new partnerships, compliance checks, and technical integrations that drain resources.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="how-it-works" class="section">
+        <div class="container">
+            <div class="section-header">
+                <h2>How Simpo works</h2>
+                <p>Plug in once, access everything. We aggregate Africa's digital services into one beautiful, consistent API experience.</p>
+            </div>
+            <div class="how-it-works-grid">
+                <div class="step">
+                    <div class="step-number">1</div>
+                    <h3>Get your API key</h3>
+                    <p>Sign up and get instant access to our unified API gateway in seconds.</p>
+                </div>
+                <div class="step">
+                    <div class="step-number">2</div>
+                    <h3>Make one integration</h3>
+                    <p>Use our single endpoint to access payments, SMS, fraud detection, and more.</p>
+                </div>
+                <div class="step">
+                    <div class="step-number">3</div>
+                    <h3>Scale across markets</h3>
+                    <p>Add new services and markets without additional integrations or complexity.</p>
+                </div>
+            </div>
+            
+            <div class="code-preview">
+                <div class="code-line"><span class="code-comment">// Send money across Africa with one API call</span></div>
+                <div class="code-line"><span class="code-keyword">const</span> payment = <span class="code-keyword">await</span> simpo.payments.create({</div>
+                <div class="code-line">  <span class="code-string">"amount"</span>: 1000,</div>
+                <div class="code-line">  <span class="code-string">"currency"</span>: <span class="code-string">"UGX"</span>,</div>
+                <div class="code-line">  <span class="code-string">"recipient"</span>: <span class="code-string">"+234801234567"</span></div>
+                <div class="code-line">});</div>
+            </div>
+        </div>
+    </section>
+
+    <section id="features" class="section features">
+        <div class="container">
+            <div class="section-header">
+                <h2>Everything you need in one place</h2>
+                <p>Powerful features designed for developers who want to move fast and build great products.</p>
+            </div>
+            <div class="features-grid">
+                <div class="feature-card">
+                    <div class="feature-icon">🔐</div>
+                    <h3>Unified API</h3>
+                    <p>One endpoint, one authentication method, and consistent responses across all services. No more managing dozens of different integrations.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">🛡️</div>
+                    <h3>Smart fraud detection</h3>
+                    <p>AI-powered fraud prevention that learns from patterns across the entire network to protect your transactions.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">🧠</div>
+                    <h3>Credit scoring with AI</h3>
+                    <p>Advanced machine learning models trained on African financial data for accurate risk assessment and lending decisions.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">💬</div>
+                    <h3>Multi-channel messaging</h3>
+                    <p>Send SMS, WhatsApp, and push notifications through one simple API call with intelligent routing and delivery optimization.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">📊</div>
+                    <h3>Predictive forecasting</h3>
+                    <p>Data-driven insights and forecasting tools to help you make better business decisions and optimize your operations.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">📈</div>
+                    <h3>Unified dashboard</h3>
+                    <p>Monitor all services, view analytics, and manage integrations from a single, beautiful interface designed for productivity.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="section">
+        <div class="container">
+            <div class="section-header">
+                <h2>Built for Africa's innovators</h2>
+                <p>Whether you're a startup or an enterprise, Simpo scales with your ambitions across the continent.</p>
+            </div>
+            <div class="audience-grid">
+                <div class="audience-card">
+                    <h3>🏦 Fintechs</h3>
+                    <p>Launch faster with pre-integrated payment rails and compliance tools</p>
+                </div>
+                <div class="audience-card">
+                    <h3>🚀 Startups</h3>
+                    <p>Focus on your core product while we handle infrastructure complexity</p>
+                </div>
+                <div class="audience-card">
+                    <h3>👨‍💻 Developers</h3>
+                    <p>Beautiful APIs, comprehensive docs, and SDKs in your favorite languages</p>
+                </div>
+                <div class="audience-card">
+                    <h3>🏢 SMEs</h3>
+                    <p>Enterprise-grade infrastructure without enterprise complexity</p>
+                </div>
+                <div class="audience-card">
+                    <h3>📱 Telcos</h3>
+                    <p>Monetize your infrastructure through our partner network</p>
+                </div>
+                <div class="audience-card">
+                    <h3>🌐 Platforms</h3>
+                    <p>Add financial services with minimal development effort</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="section why-different">
+        <div class="container">
+            <div class="section-header">
+                <h2>Why developers choose Simpo</h2>
+                <p>We're not just another API provider. We're your partner in building the future of African digital services.</p>
+            </div>
+            <div class="differentiators">
+                <div class="diff-card">
+                    <div class="diff-icon">⚡</div>
+                    <h3>Simplicity first</h3>
+                    <p>No complex integrations. No scattered documentation. Just clean, consistent APIs that work exactly as expected.</p>
+                </div>
+                <div class="diff-card">
+                    <div class="diff-icon">🧠</div>
+                    <h3>Intelligence built-in</h3>
+                    <p>AI-powered features that get smarter over time, helping you make better decisions with every transaction.</p>
+                </div>
+                <div class="diff-card">
+                    <div class="diff-icon">🚀</div>
+                    <h3>Ship at light speed</h3>
+                    <p>Go from idea to production in hours, not months. We handle the complexity so you can focus on growth.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="section final-cta">
+        <div class="container">
+            <h2>Ready to build the future?</h2>
+            <p>Join thousands of developers who are already building amazing products with Simpo.</p>
+            <div class="cta-buttons">
+                <a href="#" class="cta-primary-alt">
+                    Start integrating
+                    <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor">
+                        <path d="M8.22 2.97a.75.75 0 011.06 0l4.25 4.25a.75.75 0 010 1.06l-4.25 4.25a.75.75 0 01-1.06-1.06L11.44 8.5H2.75a.75.75 0 010-1.5h8.69L8.22 4.03a.75.75 0 010-1.06z"/>
+                    </svg>
+                </a>
+                <a href="#" class="cta-secondary">
+                    Request early access
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <script>
+        // Intersection Observer for animations
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -100px 0px'
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('fade-in');
+                }
+            });
+        }, observerOptions);
+
+        // Observe elements for animation
+        document.querySelectorAll('.feature-card, .problem-card, .step, .diff-card, .audience-card').forEach(el => {
+            observer.observe(el);
+        });
+
+        // Smooth scrolling
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({ 
+                        behavior: 'smooth', 
+                        block: 'start',
+                        inline: 'nearest'
+                    });
+                }
+            });
+        });
+
+        // Header scroll effect
+        let lastScrollY = window.scrollY;
+        window.addEventListener('scroll', () => {
+            const header = document.querySelector('header');
+            const scrollY = window.scrollY;
+            
+            if (scrollY > 100) {
+                header.style.background = 'rgba(255, 255, 255, 0.98)';
+                header.style.boxShadow = '0 1px 3px rgba(0, 0, 0, 0.1)';
+            } else {
+                header.style.background = 'rgba(255, 255, 255, 0.95)';
+                header.style.boxShadow = 'none';
+            }
+            
+            lastScrollY = scrollY;
+        });
+    </script>
+</body>
+</html>
