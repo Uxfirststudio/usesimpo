@@ -731,6 +731,79 @@
             animation: fadeInUp 0.6s ease-out forwards;
         }
         
+        /* Shimmer Effect */
+        @keyframes shimmer {
+            0% {
+                transform: rotate(0deg);
+            }
+            100% {
+                transform: rotate(360deg);
+            }
+        }
+        
+        .shimmer-card {
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .shimmer-card::before {
+            content: '';
+            position: absolute;
+            top: -3px;
+            left: -3px;
+            right: -3px;
+            bottom: -3px;
+            background: linear-gradient(90deg, 
+                #635BFF, #7C3AED, #10B981, #059669, 
+                #F59E0B, #D97706, #EF4444, #DC2626,
+                #8B5CF6, #7C3AED, #635BFF, #7C3AED);
+            background-size: 200% 200%;
+            border-radius: 16px;
+            z-index: -1;
+            animation: shimmer 30s linear infinite;
+        }
+        
+        .shimmer-card::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: white;
+            border-radius: 12px;
+            z-index: -1;
+        }
+        
+        /* Apply shimmer to specific card types */
+        .problem-card.shimmer-card::after,
+        .feature-card.shimmer-card::after,
+        .audience-card.shimmer-card::after,
+        .diff-card.shimmer-card::after {
+            background: white;
+        }
+        
+        /* Hero CTA shimmer effect */
+        .hero-cta.shimmer-card::before {
+            background: linear-gradient(45deg, 
+                #635BFF, #7C3AED, #10B981, #059669, 
+                #F59E0B, #D97706, #EF4444, #DC2626,
+                #8B5CF6, #7C3AED, #635BFF);
+        }
+        
+        .hero-cta.shimmer-card::after {
+            background: #635BFF;
+        }
+        
+        /* CTA buttons shimmer effect */
+        .cta-primary-alt.shimmer-card::after {
+            background: white;
+        }
+        
+        .cta-secondary.shimmer-card::after {
+            background: transparent;
+        }
+        
         /* Back to Top Button */
         .back-to-top {
             position: fixed;
@@ -743,7 +816,7 @@
             border: none;
             border-radius: 50%;
             cursor: pointer;
-            display: none;
+            display: flex;
             align-items: center;
             justify-content: center;
             font-size: 20px;
@@ -752,12 +825,13 @@
             z-index: 99;
             opacity: 0;
             transform: translateY(20px);
+            pointer-events: none;
         }
         
         .back-to-top.visible {
-            display: flex;
             opacity: 1;
             transform: translateY(0);
+            pointer-events: auto;
         }
         
         .back-to-top:hover {
@@ -854,7 +928,7 @@
                     </svg>
                 </a> -->
 
-                <a href="https://wa.me/256704688781" class="hero-cta">
+                <a href="https://wa.me/256704688781" class="hero-cta shimmer-card">
                     Join as Co-Founder
                     <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor">
                         <path d="M8.22 2.97a.75.75 0 011.06 0l4.25 4.25a.75.75 0 010 1.06l-4.25 4.25a.75.75 0 01-1.06-1.06L11.44 8.5H2.75a.75.75 0 010-1.5h8.69L8.22 4.03a.75.75 0 010-1.06z"/>
@@ -871,15 +945,15 @@
                 <p>Building in African markets means juggling dozens of APIs, managing multiple relationships, and dealing with inconsistent documentation.</p>
             </div>
             <div class="problem-grid">
-                <div class="problem-card">
+                <div class="problem-card shimmer-card">
                     <h3>Fragmented infrastructure</h3>
                     <p>Every service requires its own integration, API keys, and documentation. What should take days takes months.</p>
                 </div>
-                <div class="problem-card">
+                <div class="problem-card shimmer-card">
                     <h3>Inconsistent quality</h3>
                     <p>Unreliable uptime, poor documentation, and varying API standards slow down your development cycle.</p>
                 </div>
-                <div class="problem-card">
+                <div class="problem-card shimmer-card">
                     <h3>High integration costs</h3>
                     <p>Each new market means new partnerships, compliance checks, and technical integrations that drain resources.</p>
                 </div>
@@ -930,33 +1004,33 @@
             </div>
             <div class="features-grid">
 
-                  <div class="feature-card">
+                  <div class="feature-card shimmer-card">
                     <div class="feature-icon">🛡️</div>
                     <h3>Smart Fraud Detection</h3>
                     <p>AI-powered fraud prevention that learns from patterns across the entire network to protect your transactions.</p>
                 </div>
-                <div class="feature-card">
+                <div class="feature-card shimmer-card">
                     <div class="feature-icon">🔐</div>
                     <h3>Unified API</h3>
                     <p>One endpoint, one authentication method, and consistent responses across all services. No more managing dozens of different integrations.</p>
                 </div>
               
-                <div class="feature-card">
+                <div class="feature-card shimmer-card">
                     <div class="feature-icon">🧠</div>
                     <h3>Credit scoring with AI</h3>
                     <p>Advanced machine learning models trained on African financial data for accurate risk assessment and lending decisions.</p>
                 </div>
-                <div class="feature-card">
+                <div class="feature-card shimmer-card">
                     <div class="feature-icon">💬</div>
                     <h3>Multi-channel messaging</h3>
                     <p>Send SMS, WhatsApp, and push notifications through one simple API call with intelligent routing and delivery optimization.</p>
                 </div>
-                <div class="feature-card">
+                <div class="feature-card shimmer-card">
                     <div class="feature-icon">📊</div>
                     <h3>Predictive forecasting</h3>
                     <p>Data-driven insights and forecasting tools to help you make better business decisions and optimize your operations.</p>
                 </div>
-                <div class="feature-card">
+                <div class="feature-card shimmer-card">
                     <div class="feature-icon">📈</div>
                     <h3>Unified dashboard</h3>
                     <p>Monitor all services, view analytics, and manage integrations from a single, beautiful interface designed for productivity.</p>
@@ -972,27 +1046,27 @@
                 <p>Whether you're a startup or an enterprise, Simpo scales with your ambitions across the continent.</p>
             </div>
             <div class="audience-grid">
-                <div class="audience-card">
+                <div class="audience-card shimmer-card">
                     <h3>🏦 Fintechs</h3>
                     <p>Launch faster with pre-integrated payment rails and compliance tools</p>
                 </div>
-                <div class="audience-card">
+                <div class="audience-card shimmer-card">
                     <h3>🚀 Startups</h3>
                     <p>Focus on your core product while we handle infrastructure complexity</p>
                 </div>
-                <div class="audience-card">
+                <div class="audience-card shimmer-card">
                     <h3>👨‍💻 Developers</h3>
                     <p>Beautiful APIs, comprehensive docs, and SDKs in your favorite languages</p>
                 </div>
-                <div class="audience-card">
+                <div class="audience-card shimmer-card">
                     <h3>🏢 SMEs</h3>
                     <p>Enterprise-grade infrastructure without enterprise complexity</p>
                 </div>
-                <div class="audience-card">
+                <div class="audience-card shimmer-card">
                     <h3>📱 Telcos</h3>
                     <p>Monetize your infrastructure through our partner network</p>
                 </div>
-                <div class="audience-card">
+                <div class="audience-card shimmer-card">
                     <h3>🌐 Platforms</h3>
                     <p>Add financial services with minimal development effort</p>
                 </div>
@@ -1007,17 +1081,17 @@
                 <p>We're not just another API provider. We're your partner in building the future of African digital services.</p>
             </div>
             <div class="differentiators">
-                <div class="diff-card">
+                <div class="diff-card shimmer-card">
                     <div class="diff-icon">⚡</div>
                     <h3>Simplicity first</h3>
                     <p>No complex integrations. No scattered documentation. Just clean, consistent APIs that work exactly as expected.</p>
                 </div>
-                <div class="diff-card">
+                <div class="diff-card shimmer-card">
                     <div class="diff-icon">🧠</div>
                     <h3>Intelligence built-in</h3>
                     <p>AI-powered features that get smarter over time, helping you make better decisions with every transaction.</p>
                 </div>
-                <div class="diff-card">
+                <div class="diff-card shimmer-card">
                     <div class="diff-icon">🚀</div>
                     <h3>Ship at light speed</h3>
                     <p>Go from idea to production in hours, not months. We handle the complexity so you can focus on growth.</p>
@@ -1031,18 +1105,23 @@
             <h2>Ready to build the future?</h2>
             <p>Join thousands of developers who are already building amazing products with Simpo.</p>
             <div class="cta-buttons">
-                <a href="https://wa.me/256704688781" class="cta-primary-alt">
+                <a href="https://wa.me/256704688781" class="cta-primary-alt shimmer-card">
                     Join as Co-Founder
                     <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor">
                         <path d="M8.22 2.97a.75.75 0 011.06 0l4.25 4.25a.75.75 0 010 1.06l-4.25 4.25a.75.75 0 01-1.06-1.06L11.44 8.5H2.75a.75.75 0 010-1.5h8.69L8.22 4.03a.75.75 0 010-1.06z"/>
                     </svg>
                 </a>
-                <a href="https://forms.gle/1973hyVURf6BhR1U8" class="cta-secondary">
+                <a href="https://forms.gle/1973hyVURf6BhR1U8" class="cta-secondary shimmer-card">
                     Join Waitlist
                 </a>
             </div>
         </div>
     </section>
+
+    <!-- Back to Top Button -->
+    <button class="back-to-top" aria-label="Back to top">
+        ↑
+    </button>
 
     <script>
         // Intersection Observer for animations
@@ -1124,27 +1203,33 @@
         // Back to Top functionality
         const backToTopBtn = document.querySelector('.back-to-top');
         
-        // Show/hide back to top button based on scroll position
-        window.addEventListener('scroll', () => {
-            if (window.scrollY > 300) {
-                backToTopBtn.classList.add('visible');
-            } else {
-                backToTopBtn.classList.remove('visible');
-            }
-        });
-        
-        // Smooth scroll to top when button is clicked
-        backToTopBtn.addEventListener('click', () => {
-            window.scrollTo({
-                top: 0,
-                behavior: 'smooth'
+        // Only proceed if the button exists
+        if (backToTopBtn) {
+            // Show/hide back to top button based on scroll position
+            window.addEventListener('scroll', () => {
+                console.log('Scroll position:', window.scrollY); // Debug log
+                if (window.scrollY > 300) {
+                    backToTopBtn.classList.add('visible');
+                    console.log('Button should be visible'); // Debug log
+                } else {
+                    backToTopBtn.classList.remove('visible');
+                    console.log('Button should be hidden'); // Debug log
+                }
             });
-        });
+            
+            // Smooth scroll to top when button is clicked
+            backToTopBtn.addEventListener('click', () => {
+                window.scrollTo({
+                    top: 0,
+                    behavior: 'smooth'
+                });
+            });
+            
+            // Debug: Check if button exists
+            console.log('Back to top button found:', backToTopBtn);
+        } else {
+            console.error('Back to top button not found!');
+        }
     </script>
-    
-    <!-- Back to Top Button -->
-    <button class="back-to-top" aria-label="Back to top">
-        ↑
-    </button>
 </body>
 </html>
