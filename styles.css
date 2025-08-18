@@ -264,12 +264,13 @@ nav {
 .pricing-badges { display: flex; gap: 16px; flex-wrap: wrap; margin-top: 40px; }
 .pricing-badge { display: inline-flex; align-items: center; gap: 8px; background: #EEF2FF; border: 1px solid #E3E8EE; color: #0A2540; padding: 12px 16px; border-radius: 12px; font-weight: 500; font-size: 14px; }
 .pricing-card { background: #F6F8FF; border: 1px solid #E3E8EE; border-radius: 16px; padding: 28px; box-shadow: 0 8px 40px rgba(99, 91, 255, 0.08); }
-.pricing-card h3 { font-size: 22px; color: #0A2540; font-weight: 600; margin-bottom: 16px; text-transform: lowercase; }
+.pricing-card h3 { font-size: 22px; color: #0A2540; font-weight: 600; margin-bottom: 16px; }
 .plan-tabs { display: flex; gap: 6px; background: #EAEFFF; border: 1px solid #E3E8EE; padding: 8px; border-radius: 12px; margin-bottom: 24px; }
 .plan-tab { flex: 1; background: transparent; border: none; padding: 10px 14px; border-radius: 8px; font-weight: 600; color: #425466; cursor: pointer; }
 .plan-tab.active { background: #FFFFFF; color: #0A2540; box-shadow: 0 2px 6px rgba(0,0,0,0.05); }
 .price-row { display: flex; align-items: baseline; gap: 8px; margin: 10px 0 10px; }
 .price-amount { font-size: 56px; font-weight: 700; color: #0A2540; letter-spacing: -0.03em; }
+.price-amount .currency { display: inline-block; margin-right: 6px; line-height: 1; }
 .price-per { color: #425466; font-weight: 600; }
 .plan-desc { color: #425466; margin-bottom: 16px; }
 .feature-list { list-style: none; display: grid; gap: 12px; margin: 18px 0 24px; padding: 0; }
@@ -279,6 +280,15 @@ nav {
 .pricing-cta:hover { transform: translateY(-2px); box-shadow: 0 12px 24px rgba(15, 23, 42, 0.15); }
 @media (max-width: 1024px) { .pricing-grid { grid-template-columns: 1fr; } }
 @media (max-width: 768px) { .pricing-copy h2 { font-size: 36px; } }
+
+/* Price responsiveness */
+@media (max-width: 768px) {
+    .price-amount { font-size: 40px; }
+    .price-amount .currency.long { font-size: 0.6em; }
+}
+@media (max-width: 480px) {
+    .price-amount { font-size: 34px; }
+}
 
 /* Responsive Design */
 @media (max-width: 1024px) { .features-grid { grid-template-columns: 1fr; } .how-it-works-grid { grid-template-columns: 1fr; gap: 40px; } .differentiators { grid-template-columns: 1fr; gap: 40px; } }

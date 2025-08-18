@@ -94,7 +94,7 @@ let currentPlan = 'basic';
 let currentBilling = 'monthly';
 let currentCurrency = 'USD';
 
-const CURRENCY_SYMBOL = { USD: '$', UGX: 'USh', KES: 'KSh', NGN: '₦' };
+const CURRENCY_SYMBOL = { USD: '$', UGX: 'UGX', KES: 'KSh', NGN: '₦' };
 const FX = { USD: 1, UGX: 3800, KES: 128, NGN: 1550 }; // display-only FX
 
 const plans = {
@@ -134,16 +134,24 @@ const plans = {
 };
 
 function formatPrice(amount, currency) {
-    if (amount === null) return 'Custom';
-    const valueInCurrency = Math.round(amount * FX[currency]);
+    if (amount === null) return { isCustom: true, display: 'Custom' };
     const symbol = CURRENCY_SYMBOL[currency];
-    if (currency === 'USD') return `${symbol}${amount.toFixed(0)}`;
-    return `${symbol}${valueInCurrency.toLocaleString()}`;
+    const long = symbol.length > 1; // e.g., USh, KSh
+    if (currency === 'USD') {
+        return { isCustom: false, symbol, long, amountText: amount.toFixed(0) };
+    }
+    const valueInCurrency = Math.round(amount * FX[currency]);
+    return { isCustom: false, symbol, long, amountText: valueInCurrency.toLocaleString() };
 }
 
 function renderPlan() {
     const plan = plans[currentPlan];
-    priceAmount.textContent = formatPrice(plan.priceUSD[currentBilling], currentCurrency);
+    const price = formatPrice(plan.priceUSD[currentBilling], currentCurrency);
+    if (price.isCustom) {
+        priceAmount.textContent = price.display;
+    } else {
+        priceAmount.innerHTML = `<span class="currency ${price.long ? 'long' : ''}">${price.symbol}</span>${price.amountText}`;
+    }
     planDesc.textContent = plan.desc;
     planFeatures.innerHTML = plan.features.map(f => `<li>${f}</li>`).join('');
 }
