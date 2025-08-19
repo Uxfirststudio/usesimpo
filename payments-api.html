@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Payments API | Simpo API</title>
+    <meta name="description" content="Unified Payments API for Africa. Accept and send payments across markets with one integration and consistent responses.">
+    <link rel="icon" type="image/x-icon" href="/images/favicon.png">
+    <link rel="canonical" href="https://www.usesimpo.com/payments-api.html">
+    <meta name="robots" content="index, follow">
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <header>
+        <nav class="container">
+            <a href="/" class="logo">Simpo</a>
+            <ul class="nav-links">
+                <li><a href="/#features">Features</a></li>
+                <li><a href="/#how-it-works">How It Works</a></li>
+                <li><a href="/#developers">Developers</a></li>
+                <li><a href="/#pricing">Pricing</a></li>
+                <li><a href="https://forms.gle/1973hyVURf6BhR1U8" class="nav-cta">Join Waitlist</a></li>
+            </ul>
+            <button class="mobile-menu-btn" aria-label="Toggle menu"><span></span><span></span><span></span></button>
+        </nav>
+    </header>
+
+    <section class="hero">
+        <div class="container">
+            <div class="hero-content">
+                <h1>Unified <span class="gradient-text">Payments API</span> for Africa</h1>
+                <p class="hero-subtitle">Accept and send payments across markets with one integration—consistent responses, retries, and smart routing built in.</p>
+                <a href="/#pricing" class="hero-cta shimmer-card">Explore Pricing</a>
+            </div>
+        </div>
+    </section>
+
+    <section class="section">
+        <div class="container">
+            <div class="section-header">
+                <h2>Everything you need to move money</h2>
+                <p>From collections to payouts, reconciliation, and webhooks—designed for developer velocity and operational reliability.</p>
+            </div>
+            <div class="features-grid">
+                <div class="feature-card shimmer-card"><div class="feature-icon">🔁</div><h3>Collections & payouts</h3><p>Bank, card, and mobile money with unified flows and idempotency.</p></div>
+                <div class="feature-card shimmer-card"><div class="feature-icon">🧾</div><h3>Reconciliation</h3><p>Transaction states with webhooks and exports to keep your ledger accurate.</p></div>
+                <div class="feature-card shimmer-card"><div class="feature-icon">🛡️</div><h3>Risk‑aware</h3><p>Works seamlessly with Simpo Fraud Detection to reduce chargebacks and losses.</p></div>
+                <div class="feature-card shimmer-card"><div class="feature-icon">⚙️</div><h3>Simple auth</h3><p>API key based, scoped environments, and clear error messages.</p></div>
+            </div>
+        </div>
+    </section>
+
+    <section class="section" id="developers">
+        <div class="container">
+            <div class="section-header">
+                <h2>Create a payment in seconds</h2>
+                <p>Use <code>simpo.payments.create</code> to charge customers and receive a consistent response across providers.</p>
+            </div>
+            <div class="code-review anchor-offset">
+                <div class="code-preview">
+                    <div class="code-line"><span class="code-comment">// Create a payment</span></div>
+                    <div class="code-line"><span class="code-keyword">const</span> payment = <span class="code-keyword">await</span> simpo.payments.create({</div>
+                    <div class="code-line">  amount: <span class="code-keyword">10000</span>,</div>
+                    <div class="code-line">  currency: <span class="code-string">"KES"</span>,</div>
+                    <div class="code-line">  recipient: <span class="code-string">"+254700000000"</span></div>
+                    <div class="code-line">});</div>
+                </div>
+            </div>
+            <div class="pricing-badges" style="justify-content:center; margin-top:24px;">
+                <a class="pricing-badge" href="/fraud-detection.html">Fraud Detection</a>
+                <a class="pricing-badge" href="/sms-api.html">SMS API</a>
+                <a class="pricing-badge" href="/">Home</a>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <div class="container footer-inner">
+            <div class="footer-grid">
+                <div><div class="footer-logo">Simpo Api</div></div>
+                <div class="footer-col"><h4>About</h4><ul><li><a href="/#features">Resources</a></li><li><a href="/#developers">Developers</a></li><li><a href="/#pricing">Pricing</a></li></ul></div>
+                <div class="footer-col"><h4>Links</h4><ul><li><a href="/fraud-detection.html">Fraud Detection</a></li><li><a href="/sms-api.html">SMS API</a></li></ul></div>
+                <div class="footer-col"><h4>Resources</h4><ul><li><a href="/#how-it-works">Guides</a></li><li><a href="#faq">Support center</a></li></ul></div>
+                <div class="footer-col"><h4>Developers</h4><ul><li><a href="/#developers">Guides</a></li><li><a href="/#features">API reference</a></li></ul></div>
+                <div class="footer-col"><h4>Company</h4><ul><li><a href="#">Careers</a></li><li><a href="#">Terms of service</a></li></ul></div>
+            </div>
+            <hr class="footer-divider" />
+            <div class="footer-bottom"><div>© Copyright <span id="copyrightYear"></span> <strong>Simpo Api</strong></div><div class="footer-legal"><a href="#">Terms of Services</a><a href="#">Privacy Policy</a></div></div>
+        </div>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>
+

@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SMS API & WhatsApp Messaging | Simpo API</title>
+    <meta name="description" content="SMS API and WhatsApp messaging for Africa. Send OTPs and notifications with intelligent routing and delivery tracking via Simpo API.">
+    <link rel="icon" type="image/x-icon" href="/images/favicon.png">
+    <link rel="canonical" href="https://www.usesimpo.com/sms-api.html">
+    <meta name="robots" content="index, follow">
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <header>
+        <nav class="container">
+            <a href="/" class="logo">Simpo</a>
+            <ul class="nav-links">
+                <li><a href="/#features">Features</a></li>
+                <li><a href="/#how-it-works">How It Works</a></li>
+                <li><a href="/#developers">Developers</a></li>
+                <li><a href="/#pricing">Pricing</a></li>
+                <li><a href="https://forms.gle/1973hyVURf6BhR1U8" class="nav-cta">Join Waitlist</a></li>
+            </ul>
+            <button class="mobile-menu-btn" aria-label="Toggle menu"><span></span><span></span><span></span></button>
+        </nav>
+    </header>
+
+    <section class="hero">
+        <div class="container">
+            <div class="hero-content">
+                <h1>Reliable <span class="gradient-text">SMS API</span> & <span class="gradient-text">WhatsApp</span> Messaging</h1>
+                <p class="hero-subtitle">Send OTPs, alerts, and marketing messages with intelligent routing, delivery webhooks, and country‑aware sender IDs.</p>
+                <a href="/#pricing" class="hero-cta shimmer-card">Start Messaging</a>
+            </div>
+        </div>
+    </section>
+
+    <section class="section">
+        <div class="container">
+            <div class="section-header">
+                <h2>Messaging built for scale</h2>
+                <p>Reach users where they are. One API for SMS and WhatsApp with consistent responses and analytics.</p>
+            </div>
+            <div class="features-grid">
+                <div class="feature-card shimmer-card"><div class="feature-icon">📡</div><h3>Smart routing</h3><p>Automatic route selection for best deliverability and cost in each market.</p></div>
+                <div class="feature-card shimmer-card"><div class="feature-icon">🔐</div><h3>OTP ready</h3><p>Short‑code templates, expiration handling, and rate limits to secure logins.</p></div>
+                <div class="feature-card shimmer-card"><div class="feature-icon">📬</div><h3>Delivery webhooks</h3><p>Track delivery and failures with reason codes to tune campaigns.</p></div>
+                <div class="feature-card shimmer-card"><div class="feature-icon">🌍</div><h3>Regional compliance</h3><p>Sender IDs and opt‑out flows that meet local regulations.</p></div>
+            </div>
+        </div>
+    </section>
+
+    <section class="section" id="developers">
+        <div class="container">
+            <div class="section-header">
+                <h2>Send an SMS in one call</h2>
+                <p>Use <code>simpo.sms.send</code> to deliver OTPs and notifications. Track status via webhooks.</p>
+            </div>
+            <div class="code-review anchor-offset">
+                <div class="code-preview">
+                    <div class="code-line"><span class="code-comment">// Send an SMS</span></div>
+                    <div class="code-line"><span class="code-keyword">await</span> simpo.sms.send({</div>
+                    <div class="code-line">  to: <span class="code-string">"+256700000000"</span>,</div>
+                    <div class="code-line">  message: <span class="code-string">"Your OTP is 123456"</span>,</div>
+                    <div class="code-line">  senderId: <span class="code-string">"SIMPO"</span></div>
+                    <div class="code-line">});</div>
+                </div>
+            </div>
+            <div class="pricing-badges" style="justify-content:center; margin-top:24px;">
+                <a class="pricing-badge" href="/fraud-detection.html">Fraud Detection</a>
+                <a class="pricing-badge" href="/payments-api.html">Payments API</a>
+                <a class="pricing-badge" href="/">Home</a>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <div class="container footer-inner">
+            <div class="footer-grid">
+                <div><div class="footer-logo">Simpo Api</div></div>
+                <div class="footer-col"><h4>About</h4><ul><li><a href="/#features">Resources</a></li><li><a href="/#developers">Developers</a></li><li><a href="/#pricing">Pricing</a></li></ul></div>
+                <div class="footer-col"><h4>Links</h4><ul><li><a href="/payments-api.html">Payments API</a></li><li><a href="/fraud-detection.html">Fraud Detection</a></li></ul></div>
+                <div class="footer-col"><h4>Resources</h4><ul><li><a href="/#how-it-works">Guides</a></li><li><a href="#">Support center</a></li></ul></div>
+                <div class="footer-col"><h4>Developers</h4><ul><li><a href="/#developers">Guides</a></li><li><a href="/#features">API reference</a></li></ul></div>
+                <div class="footer-col"><h4>Company</h4><ul><li><a href="#">Careers</a></li><li><a href="#">Terms of service</a></li></ul></div>
+            </div>
+            <hr class="footer-divider" />
+            <div class="footer-bottom">
+                <div>© Copyright <span id="copyrightYear"></span> <strong>Simpo Api</strong></div>
+                <div class="footer-legal"><a href="#">Terms of Services</a><a href="#">Privacy Policy</a></div>
+            </div>
+        </div>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>
+

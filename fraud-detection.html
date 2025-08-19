@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fraud Detection API | Simpo API</title>
+    <meta name="description" content="AI-powered Fraud Detection API for African markets. Evaluate risk, block fraud, and protect payments with shared intelligence via a single API.">
+    <link rel="icon" type="image/x-icon" href="/images/favicon.png">
+    <link rel="canonical" href="https://www.usesimpo.com/fraud-detection.html">
+    <meta name="robots" content="index, follow">
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="Fraud Detection API | Simpo API">
+    <meta property="og:description" content="Evaluate risk, block fraud, and protect payments with shared intelligence via a single API.">
+    <meta property="og:url" content="https://www.usesimpo.com/fraud-detection.html">
+    <meta property="og:image" content="https://www.usesimpo.com/images/favicon.png">
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <header>
+        <nav class="container">
+            <a href="/" class="logo">Simpo</a>
+            <ul class="nav-links">
+                <li><a href="/#features">Features</a></li>
+                <li><a href="/#how-it-works">How It Works</a></li>
+                <li><a href="/#developers">Developers</a></li>
+                <li><a href="/#pricing">Pricing</a></li>
+                <li><a href="https://forms.gle/1973hyVURf6BhR1U8" class="nav-cta">Join Waitlist</a></li>
+            </ul>
+            <button class="mobile-menu-btn" aria-label="Toggle menu">
+                <span></span><span></span><span></span>
+            </button>
+        </nav>
+    </header>
+
+    <section class="hero">
+        <div class="container">
+            <div class="hero-content">
+                <h1><span class="gradient-text">Fraud Detection API</span> for Africa</h1>
+                <p class="hero-subtitle">Stop fraud before it happens. Our AI models learn from <strong>shared intelligence</strong> across networks to evaluate risk in real time and protect every transaction.</p>
+                <a href="/#pricing" class="hero-cta shimmer-card">Get Started</a>
+            </div>
+        </div>
+    </section>
+
+    <section class="section">
+        <div class="container">
+            <div class="section-header">
+                <h2>Why choose Simpo for fraud detection</h2>
+                <p>Built for banks, MFIs, fintechs and platforms that need precise risk decisions, low false positives, and simple developer ergonomics.</p>
+            </div>
+            <div class="features-grid">
+                <div class="feature-card shimmer-card">
+                    <div class="feature-icon">🧠</div>
+                    <h3>Shared intelligence</h3>
+                    <p>Leverage patterns learned across the network for stronger detection, even on first-time transactions.</p>
+                </div>
+                <div class="feature-card shimmer-card">
+                    <div class="feature-icon">⚡</div>
+                    <h3>Real‑time decisions</h3>
+                    <p>Sub‑100 ms risk evaluation designed to run inline before authorizations and payouts.</p>
+                </div>
+                <div class="feature-card shimmer-card">
+                    <div class="feature-icon">🛠️</div>
+                    <h3>Simple integration</h3>
+                    <p>One endpoint with consistent responses. Send context you already have: user, device, IP, amount, channel.</p>
+                </div>
+                <div class="feature-card shimmer-card">
+                    <div class="feature-icon">📊</div>
+                    <h3>Reason codes & analytics</h3>
+                    <p>Understand every decision with reason codes and model insights to tune your flows over time.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="section" id="developers">
+        <div class="container">
+            <div class="section-header">
+                <h2>Evaluate risk in one call</h2>
+                <p>Call <code>simpo.fraud.evaluate</code> before charging. Block, allow, or flag for review based on a single, clear decision.</p>
+            </div>
+            <div class="code-review anchor-offset">
+                <div class="code-preview">
+                    <div class="code-line"><span class="code-comment">// Evaluate risk before you charge</span></div>
+                    <div class="code-line"><span class="code-keyword">const</span> risk = <span class="code-keyword">await</span> simpo.fraud.evaluate({</div>
+                    <div class="code-line">  userId: <span class="code-string">"cust_123"</span>,</div>
+                    <div class="code-line">  amount: <span class="code-keyword">25000</span>,</div>
+                    <div class="code-line">  currency: <span class="code-string">"UGX"</span>,</div>
+                    <div class="code-line">  deviceFingerprint: fp,</div>
+                    <div class="code-line">  ip: req.ip,</div>
+                    <div class="code-line">  metadata: { channel: <span class="code-string">"web"</span>, mcc: <span class="code-string">"6012"</span> }</div>
+                    <div class="code-line">});</div>
+                    <div class="code-line"><span class="code-keyword">if</span> (risk.decision === <span class="code-string">"block"</span>) <span class="code-keyword">throw</span> <span class="code-keyword">new</span> Error(<span class="code-string">"High risk"</span>);</div>
+                    <div class="code-line"><span class="code-keyword">if</span> (risk.decision === <span class="code-string">"review"</span>) queueManualReview(risk);</div>
+                </div>
+            </div>
+            <div class="pricing-badges" style="justify-content:center; margin-top:24px;">
+                <a class="pricing-badge" href="/payments-api.html">Payments API</a>
+                <a class="pricing-badge" href="/sms-api.html">SMS API</a>
+                <a class="pricing-badge" href="/">Home</a>
+            </div>
+        </div>
+    </section>
+
+    <section class="section" id="faq">
+        <div class="container">
+            <div class="section-header">
+                <h2>Fraud Detection FAQ</h2>
+                <p>Common questions about integration and operations.</p>
+            </div>
+            <div class="problem-grid">
+                <div class="problem-card"><h3>What’s returned by the API?</h3><p>A decision (allow/review/block), confidence score, and reason codes. Optionally, rule hits.</p></div>
+                <div class="problem-card"><h3>Do you support webhooks?</h3><p>Yes. Receive post‑transaction events for reconciliations and model feedback.</p></div>
+                <div class="problem-card"><h3>Can we send custom features?</h3><p>Yes. Add domain‑specific signals in <code>metadata</code> to improve precision.</p></div>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <div class="container footer-inner">
+            <div class="footer-grid">
+                <div><div class="footer-logo">Simpo Api</div></div>
+                <div class="footer-col"><h4>About</h4><ul><li><a href="/#features">Resources</a></li><li><a href="/#developers">Developers</a></li><li><a href="/#pricing">Pricing</a></li></ul></div>
+                <div class="footer-col"><h4>Links</h4><ul><li><a href="/payments-api.html">Payments API</a></li><li><a href="/sms-api.html">SMS API</a></li></ul></div>
+                <div class="footer-col"><h4>Resources</h4><ul><li><a href="/#how-it-works">Guides</a></li><li><a href="#faq">Support center</a></li></ul></div>
+                <div class="footer-col"><h4>Developers</h4><ul><li><a href="/#developers">Guides</a></li><li><a href="/#features">API reference</a></li></ul></div>
+                <div class="footer-col"><h4>Company</h4><ul><li><a href="#">Careers</a></li><li><a href="#">Terms of service</a></li></ul></div>
+            </div>
+            <hr class="footer-divider" />
+            <div class="footer-bottom">
+                <div>© Copyright <span id="copyrightYear"></span> <strong>Simpo Api</strong></div>
+                <div class="footer-legal"><a href="#">Terms of Services</a><a href="#">Privacy Policy</a></div>
+            </div>
+        </div>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>
+
