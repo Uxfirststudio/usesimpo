@@ -374,4 +374,13 @@ footer { background: #ffffff; border-top: 1px solid #E3E8EE; }
 /* Anchor offset for fixed header */
 .anchor-offset { scroll-margin-top: 100px; }
 
+/* Gradient text for hero keywords */
+.gradient-text {
+    background: linear-gradient(-90deg, #fab000, #ff5996, #635bff, #635bff, #ff5996, #fab000);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    -webkit-text-fill-color: transparent;
+}
+
 
