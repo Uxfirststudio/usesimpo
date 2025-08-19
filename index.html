@@ -138,13 +138,31 @@
                 </div>
             </div>
             
-            <div class="code-preview">
+            <!-- <div class="code-preview">
                 <div class="code-line"><span class="code-comment">// Send money across Africa with one API call</span></div>
                 <div class="code-line"><span class="code-keyword">const</span> payment = <span class="code-keyword">await</span> simpo.payments.create({</div>
                 <div class="code-line">  <span class="code-string">"amount"</span>: 1000,</div>
                 <div class="code-line">  <span class="code-string">"currency"</span>: <span class="code-string">"UGX"</span>,</div>
                 <div class="code-line">  <span class="code-string">"recipient"</span>: <span class="code-string">"+234801234567"</span></div>
                 <div class="code-line">});</div>
+            </div> -->
+
+            <!-- Fraud Detection Integration: Code Review -->
+            <div id="developers" class="code-review anchor-offset">
+                <div class="code-preview">
+                    <div class="code-line"><span class="code-comment">// Fraud detection: evaluate risk before charging</span></div>
+                    <div class="code-line"><span class="code-keyword">const</span> risk = <span class="code-keyword">await</span> simpo.fraud.evaluate({</div>
+                    <div class="code-line">  userId: <span class="code-string">"cust_123"</span>,</div>
+                    <div class="code-line">  amount: <span class="code-keyword">25000</span>,</div>
+                    <div class="code-line">  currency: <span class="code-string">"UGX"</span>,</div>
+                    <div class="code-line">  deviceFingerprint: fp,</div>
+                    <div class="code-line">  ip: req.ip,</div>
+                    <div class="code-line">  metadata: { channel: <span class="code-string">"web"</span>, mcc: <span class="code-string">"6012"</span> }</div>
+                    <div class="code-line">});</div>
+                    <div class="code-line"><span class="code-keyword">if</span> (risk.decision === <span class="code-string">"block"</span>) <span class="code-keyword">throw</span> <span class="code-keyword">new</span> Error(<span class="code-string">"High risk transaction"</span>);</div>
+                    <div class="code-line"><span class="code-keyword">if</span> (risk.decision === <span class="code-string">"review"</span>) queueManualReview(risk);</div>
+                    <div class="code-line"><span class="code-comment">// proceed with payment only after passing checks</span></div>
+                </div>
             </div>
         </div>
     </section>

@@ -250,11 +250,19 @@ nav {
 .cta-secondary:hover { background: rgba(255, 255, 255, 0.1); border-color: rgba(255, 255, 255, 0.5); transform: translateY(-1px); }
 
 /* Code Block Styling (Stripe-inspired) */
-.code-preview { background: #0F172A; border-radius: 12px; padding: 24px; margin: 40px auto; max-width: 600px; font-family: 'Monaco', 'Menlo', monospace; font-size: 14px; color: #E2E8F0; border: 1px solid #1E293B; }
+.code-preview { background: #0F172A; border-radius: 12px; padding: 28px; margin: 48px auto 24px; max-width: 960px; font-family: 'Monaco', 'Menlo', monospace; font-size: 15px; color: #E2E8F0; border: 1px solid #1E293B; }
 .code-line { margin-bottom: 4px; }
 .code-comment { color: #64748B; }
 .code-string { color: #34D399; }
 .code-keyword { color: #60A5FA; }
+
+/* Responsive sizing for code preview */
+@media (min-width: 1280px) {
+    .code-preview { max-width: 1100px; font-size: 16px; }
+}
+@media (max-width: 900px) {
+    .code-preview { max-width: 100%; padding: 20px; margin: 32px auto 16px; font-size: 13px; }
+}
 
 /* Pricing Section */
 .pricing-grid { display: grid; grid-template-columns: 1.2fr 1fr; gap: 56px; align-items: stretch; }
@@ -358,5 +366,12 @@ footer { background: #ffffff; border-top: 1px solid #E3E8EE; }
 .billing-note { color: #059669; font-size: 12px; font-weight: 600; margin-left: 8px; }
 .currency-select { display: inline-flex; align-items: center; gap: 8px; }
 .currency-select select { border: 1px solid #E3E8EE; background: #FFFFFF; border-radius: 8px; padding: 8px 10px; color: #0A2540; font-weight: 600; }
+
+/* Code review layout */
+.code-review { display: block; max-width: 1100px; margin: 0 auto; }
+.code-review .code-preview { margin: 32px auto 0; }
+
+/* Anchor offset for fixed header */
+.anchor-offset { scroll-margin-top: 100px; }
 
 
