@@ -383,4 +383,41 @@ footer { background: #ffffff; border-top: 1px solid #E3E8EE; }
     -webkit-text-fill-color: transparent;
 }
 
+/* Add to styles.css */
+.nav-links li {
+    position: relative;
+}
+
+.submenu {
+    display: none;
+    position: absolute;
+    left: 0;
+    top: 100%;
+    background: #fff;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+    padding: 0.5em 0;
+    min-width: 180px;
+    z-index: 10;
+}
+
+.nav-links li:hover > .submenu,
+.nav-links li:focus-within > .submenu {
+    display: block;
+}
+
+.submenu li {
+    display: block;
+}
+
+.submenu a {
+    padding: 0.5em 1em;
+    display: block;
+    color: #0A2540;
+    text-decoration: none;
+}
+
+.submenu a:hover {
+    background: rgba(99, 91, 255, 0.1);
+}
+
 
