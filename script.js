@@ -99,33 +99,42 @@ const FX = { USD: 1, UGX: 3800, KES: 128, NGN: 1550 }; // display-only FX
 
 const plans = {
     basic: {
-        desc: 'Perfect for individuals or small businesses just getting started.',
+        desc: 'Perfect for For SACCOs & Early-stage fintechs.',
         features: [
-            'Support for up to 3 payment methods',
+            'Predefined static fraud rules (plug-and-play)',
+            'Shared intelligence (basic alerts from network)',
+            'Anomaly detection (threshold-based)',
+            'Upload CSV/Excel OR basic API access',
             'Basic fraud detection across our network',
-            '500 monthly transaction limit',
+            '5000 monthly transaction limit',
             'Dashboard for tracking payments',
             'Standard support via email'
         ],
-        priceUSD: { monthly: 29, yearly: 29 * 12 * 0.8 }
+        priceUSD: { monthly: 99, yearly: 29 * 12 * 0.8 }
     },
     business: {
-        desc: 'Built for growing teams that need scale, reliability and advanced controls.',
+        desc: 'Built For MFI, scaling fintechs, Saccos & mid-size banks',
         features: [
+            'All Lite Features',
             'Unlimited payment methods and channels',
             'Advanced fraud detection with shared intelligence',
-            'Priority routing across providers',
+            'API-first integration with core banking/payment systems',
+            'Fraud scoring engine (dynamic risk scores)',
             'Team access and roles with audit logs',
+            'Alerts via SMS, webhook, email',
             'Priority support with SLA'
         ],
-        priceUSD: { monthly: 99, yearly: 99 * 12 * 0.8 }
+        priceUSD: { monthly: 499, yearly: 499 * 12 * 0.8 }
     },
     enterprise: {
-        desc: 'For banks, MFIs and telcos requiring dedicated infrastructure and compliance.',
+        desc: 'For Banks, MFIs and Telcos &  National Fintechs.',
         features: [
+            'All Business features',
+            'AI/ML fraud detection (custom models per institution)',
             'Dedicated region-aware infrastructure',
             'On-prem or VPC deployments',
             'Custom risk rules and data residency controls',
+            'Market expansion tools (multi-country, regulatory compliance)',
             'Dedicated account manager & support',
             'Compliance & security reviews (KYC/KYB/PCI)'
         ],
