@@ -279,6 +279,9 @@ nav {
 .price-row { display: flex; align-items: baseline; gap: 8px; margin: 10px 0 10px; }
 .price-amount { font-size: 56px; font-weight: 700; color: #0A2540; letter-spacing: -0.03em; }
 .price-amount .currency { display: inline-block; margin-right: 6px; line-height: 1; }
+span.currency.long {
+    font-size: 0.7em;
+}
 .price-per { color: #425466; font-weight: 600; }
 .plan-desc { color: #425466; margin-bottom: 16px; }
 .feature-list { list-style: none; display: grid; gap: 12px; margin: 18px 0 24px; padding: 0; }
