@@ -110,7 +110,7 @@ const plans = {
             'Dashboard for tracking payments',
             'Standard support via email'
         ],
-        priceUSD: { monthly: 99, yearly: 29 * 12 * 0.8 }
+        priceUSD: { monthly: 99, yearly: 99 * 12 * 0.8 }
     },
     business: {
         desc: 'Built For MFI, scaling fintechs, Saccos & mid-size banks',
