@@ -1,0 +1,1065 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Simpo API MVP</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        :root {
+            --simpo-primary: #635bff;
+            --simpo-primary-dark: #4a42d6;
+            --simpo-secondary: #00d4a1;
+            --simpo-danger: #ff3d71;
+            --simpo-warning: #ff8a00;
+            --simpo-dark: #0a2540;
+            --simpo-gray: #6b7c93;
+            --simpo-light: #f6f9fc;
+            --simpo-border: #e6ebf1;
+            --card-shadow: 0 4px 12px rgba(0, 0, 0, 0.05), 0 1px 2px rgba(0, 0, 0, 0.05);
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+        }
+        
+        body {
+            background-color: var(--simpo-light);
+            color: var(--simpo-dark);
+            line-height: 1.6;
+        }
+        
+        .dashboard-container {
+            display: grid;
+            grid-template-columns: 240px 1fr;
+            min-height: 100vh;
+        }
+        
+        /* Sidebar Styles */
+        .sidebar {
+            background: var(--simpo-dark);
+            color: white;
+            padding: 24px 16px;
+            position: fixed;
+            width: 240px;
+            height: 100vh;
+            overflow-y: auto;
+        }
+        
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 32px;
+            padding: 0 12px;
+        }
+        
+        .logo-icon {
+            background: var(--simpo-primary);
+            width: 32px;
+            height: 32px;
+            border-radius: 6px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .logo-text {
+            font-weight: 700;
+            font-size: 20px;
+        }
+        
+        .nav-section {
+            margin-bottom: 32px;
+        }
+        
+        .nav-title {
+            text-transform: uppercase;
+            font-size: 12px;
+            font-weight: 600;
+            color: #8fa3bf;
+            margin-bottom: 16px;
+            padding: 0 12px;
+        }
+        
+        .nav-link {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 12px;
+            border-radius: 6px;
+            margin-bottom: 4px;
+            color: #d6e1ff;
+            text-decoration: none;
+            transition: all 0.2s;
+            font-size: 15px;
+        }
+        
+        .nav-link:hover, .nav-link.active {
+            background: rgba(99, 91, 255, 0.15);
+            color: white;
+        }
+        
+        .nav-link i {
+            width: 20px;
+            text-align: center;
+        }
+        
+        /* Main Content Styles */
+        .main-content {
+            grid-column: 2;
+            padding: 32px;
+        }
+        
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 32px;
+        }
+        
+        .header-title h1 {
+            font-size: 24px;
+            font-weight: 700;
+            margin-bottom: 8px;
+        }
+        
+        .header-title p {
+            color: var(--simpo-gray);
+            font-size: 15px;
+        }
+        
+        .header-actions {
+            display: flex;
+            gap: 16px;
+        }
+        
+        .btn {
+            padding: 10px 16px;
+            border-radius: 6px;
+            font-weight: 500;
+            font-size: 14px;
+            cursor: pointer;
+            border: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            transition: all 0.2s;
+        }
+        
+        .btn-primary {
+            background: var(--simpo-primary);
+            color: white;
+        }
+        
+        .btn-outline {
+            background: transparent;
+            border: 1px solid var(--simpo-border);
+            color: var(--simpo-dark);
+        }
+        
+        .btn-success {
+            background: var(--simpo-secondary);
+            color: white;
+        }
+        
+        .btn-danger {
+            background: var(--simpo-danger);
+            color: white;
+        }
+        
+        .btn:hover {
+            opacity: 0.9;
+            transform: translateY(-1px);
+        }
+        
+        /* API Section Styles */
+        .api-section {
+            margin-bottom: 40px;
+        }
+        
+        .section-title {
+            font-size: 20px;
+            font-weight: 600;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid var(--simpo-border);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .section-title i {
+            color: var(--simpo-primary);
+        }
+        
+        .endpoint-card {
+            background: white;
+            border-radius: 12px;
+            box-shadow: var(--card-shadow);
+            margin-bottom: 20px;
+            overflow: hidden;
+        }
+        
+        .endpoint-header {
+            padding: 16px 20px;
+            background: #f8fafc;
+            border-bottom: 1px solid var(--simpo-border);
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        
+        .method {
+            padding: 6px 12px;
+            border-radius: 4px;
+            font-weight: 600;
+            font-size: 14px;
+        }
+        
+        .method-get {
+            background: #e3f2fd;
+            color: #1976d2;
+        }
+        
+        .method-post {
+            background: #e8f5e9;
+            color: #388e3c;
+        }
+        
+        .endpoint-url {
+            font-family: monospace;
+            font-size: 15px;
+        }
+        
+        .endpoint-body {
+            padding: 20px;
+        }
+        
+        .endpoint-desc {
+            margin-bottom: 16px;
+            color: var(--simpo-gray);
+        }
+        
+        .params-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 16px;
+        }
+        
+        .params-table th {
+            text-align: left;
+            padding: 12px;
+            background: #f8fafc;
+            border-bottom: 1px solid var(--simpo-border);
+            font-weight: 600;
+            color: var(--simpo-gray);
+        }
+        
+        .params-table td {
+            padding: 12px;
+            border-bottom: 1px solid var(--simpo-border);
+            font-size: 14px;
+        }
+        
+        .code-block {
+            background: #f8fafc;
+            border-radius: 8px;
+            padding: 16px;
+            margin-top: 16px;
+            font-family: 'Courier New', monospace;
+            font-size: 14px;
+            line-height: 1.5;
+            overflow-x: auto;
+        }
+        
+        .code-comment {
+            color: #6b7c93;
+        }
+        
+        .code-keyword {
+            color: #ff3d71;
+        }
+        
+        .code-string {
+            color: #00d4a1;
+        }
+        
+        .test-form {
+            background: #f8fafc;
+            border-radius: 8px;
+            padding: 20px;
+            margin-top: 20px;
+        }
+        
+        .form-group {
+            margin-bottom: 16px;
+        }
+        
+        .form-label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+        }
+        
+        .form-input, .form-select, .form-textarea {
+            width: 100%;
+            padding: 10px 12px;
+            border: 1px solid var(--simpo-border);
+            border-radius: 6px;
+            font-size: 14px;
+        }
+        
+        .form-input:focus, .form-select:focus, .form-textarea:focus {
+            outline: none;
+            border-color: var(--simpo-primary);
+        }
+        
+        .test-results {
+            margin-top: 24px;
+            padding: 16px;
+            border-radius: 8px;
+            background: var(--simpo-light);
+            display: none;
+        }
+        
+        .results-visible {
+            display: block;
+        }
+        
+        .result-success {
+            border-left: 4px solid var(--simpo-secondary);
+        }
+        
+        .result-error {
+            border-left: 4px solid var(--simpo-danger);
+        }
+        
+        .result-title {
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+        
+        /* Tabs */
+        .tabs {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 20px;
+            border-bottom: 1px solid var(--simpo-border);
+        }
+        
+        .tab {
+            padding: 12px 20px;
+            cursor: pointer;
+            font-weight: 500;
+            color: var(--simpo-gray);
+            border-bottom: 3px solid transparent;
+        }
+        
+        .tab.active {
+            color: var(--simpo-primary);
+            border-bottom: 3px solid var(--simpo-primary);
+        }
+        
+        .tab-content {
+            display: none;
+        }
+        
+        .tab-content.active {
+            display: block;
+        }
+        
+        /* API Keys Section */
+        .api-keys {
+            margin-top: 40px;
+        }
+        
+        .key-card {
+            background: white;
+            border-radius: 12px;
+            box-shadow: var(--card-shadow);
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+        
+        .key-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 16px;
+        }
+        
+        .key-name {
+            font-weight: 600;
+            font-size: 16px;
+        }
+        
+        .key-value {
+            font-family: monospace;
+            background: #f8fafc;
+            padding: 12px;
+            border-radius: 6px;
+            margin-bottom: 16px;
+            word-break: break-all;
+        }
+        
+        .key-actions {
+            display: flex;
+            gap: 12px;
+        }
+    </style>
+</head>
+<body>
+    <div class="dashboard-container">
+        <!-- Sidebar -->
+        <div class="sidebar">
+            <div class="logo">
+                <div class="logo-icon">
+                    <i class="fas fa-shield-alt"></i>
+                </div>
+                <div class="logo-text">Simpo API</div>
+            </div>
+            
+            <div class="nav-section">
+                <div class="nav-title">API Services</div>
+                <a href="#" class="nav-link active">
+                    <i class="fas fa-code"></i>
+                    API Documentation
+                </a>
+                <a href="#" class="nav-link">
+                    <i class="fas fa-credit-card"></i>
+                    Payments API
+                </a>
+                <a href="#" class="nav-link">
+                    <i class="fas fa-radar"></i>
+                    Fraud Detection
+                </a>
+                <a href="#" class="nav-link">
+                    <i class="fas fa-sms"></i>
+                    SMS API
+                </a>
+            </div>
+            
+            <div class="nav-section">
+                <div class="nav-title">Developer</div>
+                <a href="#" class="nav-link">
+                    <i class="fas fa-key"></i>
+                    API Keys
+                </a>
+                <a href="#" class="nav-link">
+                    <i class="fas fa-history"></i>
+                    API Logs
+                </a>
+                <a href="#" class="nav-link">
+                    <i class="fas fa-cog"></i>
+                    Settings
+                </a>
+            </div>
+            
+            <div class="nav-section">
+                <div class="nav-title">Resources</div>
+                <a href="#" class="nav-link">
+                    <i class="fas fa-book"></i>
+                    Documentation
+                </a>
+                <a href="#" class="nav-link">
+                    <i class="fas fa-graduation-cap"></i>
+                    Tutorials
+                </a>
+                <a href="#" class="nav-link">
+                    <i class="fas fa-question-circle"></i>
+                    Support
+                </a>
+            </div>
+        </div>
+        
+        <!-- Main Content -->
+        <div class="main-content">
+            <div class="header">
+                <div class="header-title">
+                    <h1>Simpo API Documentation</h1>
+                    <p>Integrate payments, fraud detection, and SMS into your applications</p>
+                </div>
+                <div class="header-actions">
+                    <button class="btn btn-outline">
+                        <i class="fas fa-download"></i> SDKs
+                    </button>
+                    <button class="btn btn-primary">
+                        <i class="fas fa-key"></i> API Keys
+                    </button>
+                </div>
+            </div>
+            
+            <!-- Tabs -->
+            <div class="tabs">
+                <div class="tab active" data-tab="overview">Overview</div>
+                <div class="tab" data-tab="payments">Payments API</div>
+                <div class="tab" data-tab="fraud">Fraud Detection</div>
+                <div class="tab" data-tab="sms">SMS API</div>
+            </div>
+            
+            <!-- Overview Tab -->
+            <div class="tab-content active" id="overview">
+                <div class="api-section">
+                    <h2 class="section-title">
+                        <i class="fas fa-info-circle"></i>
+                        API Overview
+                    </h2>
+                    
+                    <p>Simpo API provides a unified platform for payments, fraud detection, and SMS services. Our API is RESTful and uses JSON for requests and responses.</p>
+                    
+                    <div class="endpoint-card">
+                        <div class="endpoint-header">
+                            <span class="method method-get">GET</span>
+                            <span class="endpoint-url">https://api.userusesimpo.com/v1/health</span>
+                        </div>
+                        <div class="endpoint-body">
+                            <div class="endpoint-desc">
+                                Check the status of the Simpo API services.
+                            </div>
+                            
+                            <div class="code-block">
+                                <span class="code-comment">// Example Request</span><br>
+                                curl -X GET https://api.simpo.com/v1/health \<br>
+                                &nbsp;&nbsp;-H "Authorization: Bearer YOUR_API_KEY"
+                            </div>
+                            
+                            <div class="code-block">
+                                <span class="code-comment">// Example Response</span><br>
+                                {<br>
+                                &nbsp;&nbsp;"status": "ok",<br>
+                                &nbsp;&nbsp;"services": {<br>
+                                &nbsp;&nbsp;&nbsp;&nbsp;"payments": "online",<br>
+                                &nbsp;&nbsp;&nbsp;&nbsp;"fraud_detection": "online",<br>
+                                &nbsp;&nbsp;&nbsp;&nbsp;"sms": "online"<br>
+                                &nbsp;&nbsp;},<br>
+                                &nbsp;&nbsp;"timestamp": "2023-10-05T10:30:00Z"<br>
+                                }
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="api-section">
+                    <h2 class="section-title">
+                        <i class="fas fa-key"></i>
+                        Authentication
+                    </h2>
+                    
+                    <p>All API requests must include your API key in the Authorization header.</p>
+                    
+                    <div class="code-block">
+                        <span class="code-comment">// Include your API key in all requests</span><br>
+                        Authorization: Bearer sk_test_51Hz...</br>
+                        Content-Type: application/json
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Payments API Tab -->
+            <div class="tab-content" id="payments">
+                <div class="api-section">
+                    <h2 class="section-title">
+                        <i class="fas fa-credit-card"></i>
+                        Payments API
+                    </h2>
+                    
+                    <p>Process payments through MTN Mobile Money and Airtel Money in Uganda.</p>
+                    
+                    <div class="endpoint-card">
+                        <div class="endpoint-header">
+                            <span class="method method-post">POST</span>
+                            <span class="endpoint-url">https://api.simpo.com/v1/payments</span>
+                        </div>
+                        <div class="endpoint-body">
+                            <div class="endpoint-desc">
+                                Initiate a payment request.
+                            </div>
+                            
+                            <table class="params-table">
+                                <thead>
+                                    <tr>
+                                        <th>Parameter</th>
+                                        <th>Type</th>
+                                        <th>Required</th>
+                                        <th>Description</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>amount</td>
+                                        <td>integer</td>
+                                        <td>Yes</td>
+                                        <td>Amount in UGX</td>
+                                    </tr>
+                                    <tr>
+                                        <td>phone</td>
+                                        <td>string</td>
+                                        <td>Yes</td>
+                                        <td>Customer phone number (256... format)</td>
+                                    </tr>
+                                    <tr>
+                                        <td>provider</td>
+                                        <td>string</td>
+                                        <td>Yes</td>
+                                        <td>Mobile money provider (mtn or airtel)</td>
+                                    </tr>
+                                    <tr>
+                                        <td>reference</td>
+                                        <td>string</td>
+                                        <td>Yes</td>
+                                        <td>Your unique transaction reference</td>
+                                    </tr>
+                                    <tr>
+                                        <td>description</td>
+                                        <td>string</td>
+                                        <td>No</td>
+                                        <td>Description of the payment</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                            
+                            <div class="code-block">
+                                <span class="code-comment">// Example Request</span><br>
+                                {<br>
+                                &nbsp;&nbsp;"amount": 10000,<br>
+                                &nbsp;&nbsp;"phone": "256772123456",<br>
+                                &nbsp;&nbsp;"provider": "mtn",<br>
+                                &nbsp;&nbsp;"reference": "order_12345",<br>
+                                &nbsp;&nbsp;"description": "Payment for Order #12345"<br>
+                                }
+                            </div>
+                            
+                            <div class="code-block">
+                                <span class="code-comment">// Example Response</span><br>
+                                {<br>
+                                &nbsp;&nbsp;"id": "pay_123456789",<br>
+                                &nbsp;&nbsp;"status": "pending",<br>
+                                &nbsp;&nbsp;"amount": 10000,<br>
+                                &nbsp;&nbsp;"phone": "256772123456",<br>
+                                &nbsp;&nbsp;"provider": "mtn",<br>
+                                &nbsp;&nbsp;"reference": "order_12345",<br>
+                                &nbsp;&nbsp;"created_at": "2023-10-05T10:30:00Z"<br>
+                                }
+                            </div>
+                            
+                            <div class="test-form">
+                                <h3>Test Payment</h3>
+                                <div class="form-group">
+                                    <label class="form-label">Amount (UGX)</label>
+                                    <input type="number" class="form-input" id="paymentAmount" value="1000">
+                                </div>
+                                <div class="form-group">
+                                    <label class="form-label">Phone Number</label>
+                                    <input type="text" class="form-input" id="paymentPhone" value="256772123456">
+                                </div>
+                                <div class="form-group">
+                                    <label class="form-label">Provider</label>
+                                    <select class="form-select" id="paymentProvider">
+                                        <option value="mtn">MTN Mobile Money</option>
+                                        <option value="airtel">Airtel Money</option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label class="form-label">Reference</label>
+                                    <input type="text" class="form-input" id="paymentReference" value="test_123">
+                                </div>
+                                <button class="btn btn-success" onclick="testPayment()">
+                                    <i class="fas fa-paper-plane"></i> Test Payment
+                                </button>
+                                
+                                <div class="test-results" id="paymentResults">
+                                    <div class="result-title">Payment Response</div>
+                                    <pre id="paymentResponse"></pre>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Fraud Detection Tab -->
+            <div class="tab-content" id="fraud">
+                <div class="api-section">
+                    <h2 class="section-title">
+                        <i class="fas fa-radar"></i>
+                        Fraud Detection API
+                    </h2>
+                    
+                    <p>Detect and prevent fraudulent transactions with our AI-powered fraud detection system.</p>
+                    
+                    <div class="endpoint-card">
+                        <div class="endpoint-header">
+                            <span class="method method-post">POST</span>
+                            <span class="endpoint-url">https://api.simpo.com/v1/fraud/detect</span>
+                        </div>
+                        <div class="endpoint-body">
+                            <div class="endpoint-desc">
+                                Analyze a transaction for potential fraud.
+                            </div>
+                            
+                            <table class="params-table">
+                                <thead>
+                                    <tr>
+                                        <th>Parameter</th>
+                                        <th>Type</th>
+                                        <th>Required</th>
+                                        <th>Description</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>transaction_id</td>
+                                        <td>string</td>
+                                        <td>Yes</td>
+                                        <td>Unique transaction identifier</td>
+                                    </tr>
+                                    <tr>
+                                        <td>amount</td>
+                                        <td>integer</td>
+                                        <td>Yes</td>
+                                        <td>Transaction amount in UGX</td>
+                                    </tr>
+                                    <tr>
+                                        <td>user_id</td>
+                                        <td>string</td>
+                                        <td>Yes</td>
+                                        <td>Unique user identifier</td>
+                                    </tr>
+                                    <tr>
+                                        <td>phone</td>
+                                        <td>string</td>
+                                        <td>Yes</td>
+                                        <td>User phone number</td>
+                                    </tr>
+                                    <tr>
+                                        <td>device_id</td>
+                                        <td>string</td>
+                                        <td>No</td>
+                                        <td>Device fingerprint</td>
+                                    </tr>
+                                    <tr>
+                                        <td>ip_address</td>
+                                        <td>string</td>
+                                        <td>No</td>
+                                        <td>User IP address</td>
+                                    </tr>
+                                    <tr>
+                                        <td>location</td>
+                                        <td>object</td>
+                                        <td>No</td>
+                                        <td>Geolocation data</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                            
+                            <div class="code-block">
+                                <span class="code-comment">// Example Request</span><br>
+                                {<br>
+                                &nbsp;&nbsp;"transaction_id": "txn_123456789",<br>
+                                &nbsp;&nbsp;"amount": 150000,<br>
+                                &nbsp;&nbsp;"user_id": "user_12345",<br>
+                                &nbsp;&nbsp;"phone": "256772123456",<br>
+                                &nbsp;&nbsp;"device_id": "a13xC34e516g7",<br>
+                                &nbsp;&nbsp;"ip_address": "192.168.1.1",<br>
+                                &nbsp;&nbsp;"location": {<br>
+                                &nbsp;&nbsp;&nbsp;&nbsp;"city": "Kampala",<br>
+                                &nbsp;&nbsp;&nbsp;&nbsp;"country": "UG"<br>
+                                &nbsp;&nbsp;}<br>
+                                }
+                            </div>
+                            
+                            <div class="code-block">
+                                <span class="code-comment">// Example Response</span><br>
+                                {<br>
+                                &nbsp;&nbsp;"transaction_id": "txn_123456789",<br>
+                                &nbsp;&nbsp;"risk_score": 0.87,<br>
+                                &nbsp;&nbsp;"risk_level": "high",<br>
+                                &nbsp;&nbsp;"reasons": [<br>
+                                &nbsp;&nbsp;&nbsp;&nbsp;"Unusual transaction amount",<br>
+                                &nbsp;&nbsp;&nbsp;&nbsp;"New device detected"<br>
+                                &nbsp;&nbsp;],<br>
+                                &nbsp;&nbsp;"recommendation": "review"<br>
+                                }
+                            </div>
+                            
+                            <div class="test-form">
+                                <h3>Test Fraud Detection</h3>
+                                <div class="form-group">
+                                    <label class="form-label">Transaction ID</label>
+                                    <input type="text" class="form-input" id="fraudTransactionId" value="txn_test_123">
+                                </div>
+                                <div class="form-group">
+                                    <label class="form-label">Amount (UGX)</label>
+                                    <input type="number" class="form-input" id="fraudAmount" value="50000">
+                                </div>
+                                <div class="form-group">
+                                    <label class="form-label">User ID</label>
+                                    <input type="text" class="form-input" id="fraudUserId" value="user_test_456">
+                                </div>
+                                <div class="form-group">
+                                    <label class="form-label">Phone Number</label>
+                                    <input type="text" class="form-input" id="fraudPhone" value="256772123456">
+                                </div>
+                                <button class="btn btn-success" onclick="testFraudDetection()">
+                                    <i class="fas fa-search"></i> Check for Fraud
+                                </button>
+                                
+                                <div class="test-results" id="fraudResults">
+                                    <div class="result-title">Fraud Detection Results</div>
+                                    <pre id="fraudResponse"></pre>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- SMS API Tab -->
+            <div class="tab-content" id="sms">
+                <div class="api-section">
+                    <h2 class="section-title">
+                        <i class="fas fa-sms"></i>
+                        SMS API
+                    </h2>
+                    
+                    <p>Send SMS messages to Ugandan phone numbers with our reliable SMS gateway.</p>
+                    
+                    <div class="endpoint-card">
+                        <div class="endpoint-header">
+                            <span class="method method-post">POST</span>
+                            <span class="endpoint-url">https://api.simpo.com/v1/sms/send</span>
+                        </div>
+                        <div class="endpoint-body">
+                            <div class="endpoint-desc">
+                                Send an SMS message.
+                            </div>
+                            
+                            <table class="params-table">
+                                <thead>
+                                    <tr>
+                                        <th>Parameter</th>
+                                        <th>Type</th>
+                                        <th>Required</th>
+                                        <th>Description</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>to</td>
+                                        <td>string</td>
+                                        <td>Yes</td>
+                                        <td>Recipient phone number (256... format)</td>
+                                    </tr>
+                                    <tr>
+                                        <td>message</td>
+                                        <td>string</td>
+                                        <td>Yes</td>
+                                        <td>SMS message content</td>
+                                    </tr>
+                                    <tr>
+                                        <td>sender_id</td>
+                                        <td>string</td>
+                                        <td>No</td>
+                                        <td>Sender ID (default: SIMPO)</td>
+                                    </tr>
+                                    <tr>
+                                        <td>reference</td>
+                                        <td>string</td>
+                                        <td>No</td>
+                                        <td>Your unique reference for this message</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                            
+                            <div class="code-block">
+                                <span class="code-comment">// Example Request</span><br>
+                                {<br>
+                                &nbsp;&nbsp;"to": "256772123456",<br>
+                                &nbsp;&nbsp;"message": "Your payment of UGX 10,000 was successful. Ref: ORD12345",<br>
+                                &nbsp;&nbsp;"sender_id": "SIMPO",<br>
+                                &nbsp;&nbsp;"reference": "msg_12345"<br>
+                                }
+                            </div>
+                            
+                            <div class="code-block">
+                                <span class="code-comment">// Example Response</span><br>
+                                {<br>
+                                &nbsp;&nbsp;"id": "sms_123456789",<br>
+                                &nbsp;&nbsp;"to": "256772123456",<br>
+                                &nbsp;&nbsp;"message": "Your payment of UGX 10,000 was successful. Ref: ORD12345",<br>
+                                &nbsp;&nbsp;"status": "queued",<br>
+                                &nbsp;&nbsp;"reference": "msg_12345",<br>
+                                &nbsp;&nbsp;"created_at": "2023-10-05T10:30:00Z"<br>
+                                }
+                            </div>
+                            
+                            <div class="test-form">
+                                <h3>Test SMS</h3>
+                                <div class="form-group">
+                                    <label class="form-label">To (Phone Number)</label>
+                                    <input type="text" class="form-input" id="smsTo" value="256772123456">
+                                </div>
+                                <div class="form-group">
+                                    <label class="form-label">Message</label>
+                                    <textarea class="form-textarea" id="smsMessage" rows="3">This is a test message from Simpo API</textarea>
+                                </div>
+                                <div class="form-group">
+                                    <label class="form-label">Sender ID</label>
+                                    <input type="text" class="form-input" id="smsSender" value="SIMPO">
+                                </div>
+                                <button class="btn btn-success" onclick="testSMS()">
+                                    <i class="fas fa-paper-plane"></i> Send Test SMS
+                                </button>
+                                
+                                <div class="test-results" id="smsResults">
+                                    <div class="result-title">SMS Response</div>
+                                    <pre id="smsResponse"></pre>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- API Keys Section -->
+            <div class="api-keys">
+                <h2 class="section-title">
+                    <i class="fas fa-key"></i>
+                    Your API Keys
+                </h2>
+                
+                <div class="key-card">
+                    <div class="key-header">
+                        <div class="key-name">Test Secret Key</div>
+                        <div class="key-actions">
+                            <button class="btn btn-outline">
+                                <i class="fas fa-copy"></i> Copy
+                            </button>
+                            <button class="btn btn-outline">
+                                <i class="fas fa-eye"></i> Show
+                            </button>
+                        </div>
+                    </div>
+                    <div class="key-value">sk_test_51Hz... (hidden)</div>
+                    <p>Use this key for testing in development environment.</p>
+                </div>
+                
+                <div class="key-card">
+                    <div class="key-header">
+                        <div class="key-name">Live Secret Key</div>
+                        <div class="key-actions">
+                            <button class="btn btn-outline">
+                                <i class="fas fa-copy"></i> Copy
+                            </button>
+                            <button class="btn btn-outline">
+                                <i class="fas fa-eye"></i> Show
+                            </button>
+                        </div>
+                    </div>
+                    <div class="key-value">sk_live_82Jk... (hidden)</div>
+                    <p>Use this key for live transactions in production.</p>
+                </div>
+                
+                <button class="btn btn-primary">
+                    <i class="fas fa-plus"></i> Create New API Key
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Tab functionality
+        document.querySelectorAll('.tab').forEach(tab => {
+            tab.addEventListener('click', () => {
+                // Remove active class from all tabs and contents
+                document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+                document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+                
+                // Add active class to clicked tab
+                tab.classList.add('active');
+                
+                // Show corresponding content
+                const tabId = tab.getAttribute('data-tab');
+                document.getElementById(tabId).classList.add('active');
+            });
+        });
+        
+        // Test Payment function
+        function testPayment() {
+            const results = document.getElementById('paymentResults');
+            const response = document.getElementById('paymentResponse');
+            
+            // Simulate API response
+            const mockResponse = {
+                id: "pay_" + Math.random().toString(36).substr(2, 9),
+                status: "pending",
+                amount: document.getElementById('paymentAmount').value,
+                phone: document.getElementById('paymentPhone').value,
+                provider: document.getElementById('paymentProvider').value,
+                reference: document.getElementById('paymentReference').value,
+                created_at: new Date().toISOString()
+            };
+            
+            response.textContent = JSON.stringify(mockResponse, null, 2);
+            results.classList.add('results-visible', 'result-success');
+        }
+        
+        // Test Fraud Detection function
+        function testFraudDetection() {
+            const results = document.getElementById('fraudResults');
+            const response = document.getElementById('fraudResponse');
+            
+            // Generate random risk score
+            const riskScore = Math.random();
+            let riskLevel = "low";
+            let recommendation = "approve";
+            
+            if (riskScore > 0.7) {
+                riskLevel = "high";
+                recommendation = "review";
+            } else if (riskScore > 0.4) {
+                riskLevel = "medium";
+                recommendation = "monitor";
+            }
+            
+            // Simulate API response
+            const mockResponse = {
+                transaction_id: document.getElementById('fraudTransactionId').value,
+                risk_score: riskScore,
+                risk_level: riskLevel,
+                reasons: riskLevel === "high" ? 
+                    ["Unusual transaction amount", "New device detected"] : 
+                    ["Transaction appears legitimate"],
+                recommendation: recommendation
+            };
+            
+            response.textContent = JSON.stringify(mockResponse, null, 2);
+            results.classList.add('results-visible', riskLevel === "high" ? 'result-error' : 'result-success');
+        }
+        
+        // Test SMS function
+        function testSMS() {
+            const results = document.getElementById('smsResults');
+            const response = document.getElementById('smsResponse');
+            
+            // Simulate API response
+            const mockResponse = {
+                id: "sms_" + Math.random().toString(36).substr(2, 9),
+                to: document.getElementById('smsTo').value,
+                message: document.getElementById('smsMessage').value,
+                status: "queued",
+                sender_id: document.getElementById('smsSender').value || "SIMPO",
+                created_at: new Date().toISOString()
+            };
+            
+            response.textContent = JSON.stringify(mockResponse, null, 2);
+            results.classList.add('results-visible', 'result-success');
+        }
+    </script>
+</body>
+</html>

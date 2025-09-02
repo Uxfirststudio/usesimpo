@@ -1,0 +1,660 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bulk SMS Service</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --stripe-primary: #635bff;
+            --stripe-secondary: #efedff;
+            --stripe-dark: #1a1a36;
+            --stripe-light: #f6f9fc;
+            --stripe-success: #00c851;
+            --stripe-border: #e6ebf1;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background-color: var(--stripe-light);
+            color: #333;
+            line-height: 1.6;
+        }
+        
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        header {
+            text-align: center;
+            padding: 30px 0;
+            background: linear-gradient(120deg, var(--stripe-primary), #7b73ff);
+            color: white;
+            border-radius: 10px;
+            margin-bottom: 30px;
+            box-shadow: 0 4px 6px rgba(50, 50, 93, 0.11), 0 1px 3px rgba(0, 0, 0, 0.08);
+        }
+        
+        header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+        }
+        
+        header p {
+            font-size: 1.1rem;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+        
+        .card {
+            background: white;
+            border-radius: 10px;
+            padding: 25px;
+            margin-bottom: 25px;
+            box-shadow: 0 4px 6px rgba(50, 50, 93, 0.11), 0 1px 3px rgba(0, 0, 0, 0.08);
+            border: 1px solid var(--stripe-border);
+        }
+        
+        .card-title {
+            font-size: 1.3rem;
+            color: var(--stripe-primary);
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .package-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+        
+        .package-option {
+            border: 2px solid var(--stripe-border);
+            border-radius: 8px;
+            padding: 15px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .package-option:hover {
+            border-color: var(--stripe-primary);
+            transform: translateY(-2px);
+        }
+        
+        .package-option.selected {
+            border-color: var(--stripe-primary);
+            background-color: var(--stripe-secondary);
+        }
+        
+        .package-amount {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: var(--stripe-dark);
+        }
+        
+        .package-price {
+            color: var(--stripe-primary);
+            font-weight: 600;
+        }
+        
+        .form-group {
+            margin-bottom: 20px;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: var(--stripe-dark);
+        }
+        
+        .form-control {
+            width: 100%;
+            padding: 12px 15px;
+            border: 1px solid var(--stripe-border);
+            border-radius: 6px;
+            font-size: 1rem;
+            transition: border-color 0.3s;
+        }
+        
+        .form-control:focus {
+            outline: none;
+            border-color: var(--stripe-primary);
+            box-shadow: 0 0 0 2px var(--stripe-secondary);
+        }
+        
+        .btn {
+            display: inline-block;
+            background: var(--stripe-primary);
+            color: white;
+            padding: 12px 25px;
+            border: none;
+            border-radius: 6px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .btn:hover {
+            background: #524bd8;
+            transform: translateY(-2px);
+            box-shadow: 0 7px 14px rgba(50, 50, 93, 0.1), 0 3px 6px rgba(0, 0, 0, 0.08);
+        }
+        
+        .btn-block {
+            display: block;
+            width: 100%;
+        }
+        
+        .summary-box {
+            background-color: var(--stripe-secondary);
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+        }
+        
+        .summary-item {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 10px;
+        }
+        
+        .summary-total {
+            font-size: 1.2rem;
+            font-weight: bold;
+            border-top: 1px solid var(--stripe-border);
+            padding-top: 10px;
+            margin-top: 10px;
+        }
+        
+        .hidden {
+            display: none;
+        }
+        
+        .step-indicator {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 30px;
+            position: relative;
+        }
+        
+        .step-indicator::before {
+            content: '';
+            position: absolute;
+            top: 20px;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background: var(--stripe-border);
+            z-index: 1;
+        }
+        
+        .step {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            position: relative;
+            z-index: 2;
+        }
+        
+        .step-number {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: white;
+            border: 2px solid var(--stripe-border);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            margin-bottom: 8px;
+        }
+        
+        .step.active .step-number {
+            background: var(--stripe-primary);
+            color: white;
+            border-color: var(--stripe-primary);
+        }
+        
+        .step.completed .step-number {
+            background: var(--stripe-success);
+            color: white;
+            border-color: var(--stripe-success);
+        }
+        
+        .step-text {
+            font-size: 0.9rem;
+            color: #666;
+        }
+        
+        .step.active .step-text {
+            color: var(--stripe-primary);
+            font-weight: 600;
+        }
+        
+        textarea {
+            min-height: 120px;
+            resize: vertical;
+        }
+        
+        .char-count {
+            text-align: right;
+            font-size: 0.9rem;
+            color: #666;
+            margin-top: 5px;
+        }
+        
+        footer {
+            text-align: center;
+            margin-top: 40px;
+            padding: 20px;
+            color: #666;
+            font-size: 0.9rem;
+        }
+        
+        @media (max-width: 768px) {
+            .package-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            
+            .step-indicator {
+                flex-direction: column;
+                gap: 20px;
+            }
+            
+            .step-indicator::before {
+                display: none;
+            }
+            
+            .step {
+                flex-direction: row;
+                gap: 15px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Bulk SMS Service</h1>
+            <p>Send messages to multiple recipients quickly and affordably</p>
+        </header>
+        
+        <div class="step-indicator">
+            <div class="step active" id="step1">
+                <div class="step-number">1</div>
+                <div class="step-text">Select Package</div>
+            </div>
+            <div class="step" id="step2">
+                <div class="step-number">2</div>
+                <div class="step-text">Payment</div>
+            </div>
+            <div class="step" id="step3">
+                <div class="step-number">3</div>
+                <div class="step-text">Compose Message</div>
+            </div>
+            <div class="step" id="step4">
+                <div class="step-number">4</div>
+                <div class="step-text">Send</div>
+            </div>
+        </div>
+        
+        <!-- Package Selection Card -->
+        <div class="card" id="package-selection">
+            <h2 class="card-title"><i class="fas fa-box-open"></i> Select SMS Package</h2>
+            
+            <div class="package-grid">
+                <div class="package-option" data-amount="25" data-price="2.50">
+                    <div class="package-amount">25 SMS</div>
+                    <div class="package-price">$2.50</div>
+                </div>
+                <div class="package-option" data-amount="50" data-price="4.50">
+                    <div class="package-amount">50 SMS</div>
+                    <div class="package-price">$4.50</div>
+                </div>
+                <div class="package-option" data-amount="100" data-price="8.00">
+                    <div class="package-amount">100 SMS</div>
+                    <div class="package-price">$8.00</div>
+                </div>
+                <div class="package-option" data-amount="250" data-price="18.00">
+                    <div class="package-amount">250 SMS</div>
+                    <div class="package-price">$18.00</div>
+                </div>
+                <div class="package-option" data-amount="500" data-price="30.00">
+                    <div class="package-amount">500 SMS</div>
+                    <div class="package-price">$30.00</div>
+                </div>
+                <div class="package-option" data-amount="1000" data-price="50.00">
+                    <div class="package-amount">1000 SMS</div>
+                    <div class="package-price">$50.00</div>
+                </div>
+            </div>
+            
+            <div class="summary-box">
+                <div class="summary-item">
+                    <span>Selected Package:</span>
+                    <span id="selected-package">None</span>
+                </div>
+                <div class="summary-item">
+                    <span>Unit Price:</span>
+                    <span id="unit-price">$0.00</span>
+                </div>
+                <div class="summary-item summary-total">
+                    <span>Total to Pay:</span>
+                    <span id="total-price">$0.00</span>
+                </div>
+            </div>
+            
+            <button class="btn btn-block" id="proceed-to-payment">Proceed to Payment</button>
+        </div>
+        
+        <!-- Payment Card -->
+        <div class="card hidden" id="payment-section">
+            <h2 class="card-title"><i class="fas fa-credit-card"></i> Mobile Money Payment</h2>
+            
+            <div class="form-group">
+                <label for="phone-number">Mobile Money Number</label>
+                <input type="tel" class="form-control" id="phone-number" placeholder="e.g., 0551234567">
+            </div>
+            
+            <div class="form-group">
+                <label for="network">Mobile Network</label>
+                <select class="form-control" id="network">
+                    <option value="">Select your network</option>
+                    <option value="mtn">MTN Mobile Money</option>
+                    <option value="vodafone">Vodafone Cash</option>
+                    <option value="airteltigo">AirtelTigo Money</option>
+                </select>
+            </div>
+            
+            <div class="summary-box">
+                <div class="summary-item">
+                    <span>Package:</span>
+                    <span id="payment-package">25 SMS</span>
+                </div>
+                <div class="summary-item summary-total">
+                    <span>Amount to Pay:</span>
+                    <span id="payment-amount">$2.50</span>
+                </div>
+            </div>
+            
+            <button class="btn btn-block" id="make-payment">Pay Now</button>
+        </div>
+        
+        <!-- Message Composition Card -->
+        <div class="card hidden" id="message-section">
+            <h2 class="card-title"><i class="fas fa-envelope"></i> Compose Your Message</h2>
+            
+            <div class="form-group">
+                <label for="recipients">Recipient Numbers (separate with commas)</label>
+                <textarea class="form-control" id="recipients" placeholder="e.g., 0201234567, 0557654321"></textarea>
+                <div class="char-count"><span id="recipient-count">0</span> numbers entered</div>
+            </div>
+            
+            <div class="form-group">
+                <label for="message">Your Message</label>
+                <textarea class="form-control" id="message" placeholder="Type your message here..."></textarea>
+                <div class="char-count"><span id="char-count">0</span> characters (160 characters per SMS)</div>
+            </div>
+            
+            <div class="summary-box">
+                <div class="summary-item">
+                    <span>Messages to send:</span>
+                    <span id="messages-to-send">0</span>
+                </div>
+                <div class="summary-item">
+                    <span>Recipients:</span>
+                    <span id="recipients-count">0</span>
+                </div>
+                <div class="summary-item">
+                    <span>Available in package:</span>
+                    <span id="available-sms">25</span>
+                </div>
+            </div>
+            
+            <button class="btn btn-block" id="send-messages">Send Messages</button>
+        </div>
+        
+        <!-- Confirmation Card -->
+        <div class="card hidden" id="confirmation-section">
+            <h2 class="card-title"><i class="fas fa-check-circle"></i> Messages Sent Successfully!</h2>
+            
+            <div style="text-align: center; padding: 20px;">
+                <i class="fas fa-check-circle" style="font-size: 5rem; color: var(--stripe-success); margin-bottom: 20px;"></i>
+                <p>Your bulk SMS messages have been successfully sent to all recipients.</p>
+                
+                <div class="summary-box" style="max-width: 400px; margin: 20px auto;">
+                    <div class="summary-item">
+                        <span>Messages Sent:</span>
+                        <span id="sent-count">25</span>
+                    </div>
+                    <div class="summary-item">
+                        <span>Recipients:</span>
+                        <span id="sent-recipients">5</span>
+                    </div>
+                    <div class="summary-item">
+                        <span>Total Cost:</span>
+                        <span id="sent-cost">$2.50</span>
+                    </div>
+                </div>
+                
+                <p>Thank you for using our Bulk SMS service!</p>
+            </div>
+            
+            <button class="btn btn-block" id="send-more">Send More Messages</button>
+        </div>
+        
+        <footer>
+            <p>© 2023 Bulk SMS Service. All rights reserved.</p>
+        </footer>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Package selection
+            const packageOptions = document.querySelectorAll('.package-option');
+            const selectedPackageEl = document.getElementById('selected-package');
+            const unitPriceEl = document.getElementById('unit-price');
+            const totalPriceEl = document.getElementById('total-price');
+            const proceedBtn = document.getElementById('proceed-to-payment');
+            
+            // Payment section
+            const paymentSection = document.getElementById('payment-section');
+            const paymentPackageEl = document.getElementById('payment-package');
+            const paymentAmountEl = document.getElementById('payment-amount');
+            const makePaymentBtn = document.getElementById('make-payment');
+            
+            // Message section
+            const messageSection = document.getElementById('message-section');
+            const recipientsEl = document.getElementById('recipients');
+            const messageEl = document.getElementById('message');
+            const recipientCountEl = document.getElementById('recipient-count');
+            const charCountEl = document.getElementById('char-count');
+            const messagesToSendEl = document.getElementById('messages-to-send');
+            const recipientsCountEl = document.getElementById('recipients-count');
+            const availableSmsEl = document.getElementById('available-sms');
+            const sendMessagesBtn = document.getElementById('send-messages');
+            
+            // Confirmation section
+            const confirmationSection = document.getElementById('confirmation-section');
+            const sentCountEl = document.getElementById('sent-count');
+            const sentRecipientsEl = document.getElementById('sent-recipients');
+            const sentCostEl = document.getElementById('sent-cost');
+            const sendMoreBtn = document.getElementById('send-more');
+            
+            // Steps
+            const step1 = document.getElementById('step1');
+            const step2 = document.getElementById('step2');
+            const step3 = document.getElementById('step3');
+            const step4 = document.getElementById('step4');
+            
+            let selectedPackage = null;
+            let messageCount = 0;
+            
+            // Package selection logic
+            packageOptions.forEach(option => {
+                option.addEventListener('click', function() {
+                    packageOptions.forEach(opt => opt.classList.remove('selected'));
+                    this.classList.add('selected');
+                    
+                    selectedPackage = {
+                        amount: this.dataset.amount,
+                        price: this.dataset.price
+                    };
+                    
+                    selectedPackageEl.textContent = `${selectedPackage.amount} SMS`;
+                    unitPriceEl.textContent = `$${(parseFloat(selectedPackage.price) / parseInt(selectedPackage.amount)).toFixed(2)} per SMS`;
+                    totalPriceEl.textContent = `$${selectedPackage.price}`;
+                    
+                    proceedBtn.disabled = false;
+                });
+            });
+            
+            // Proceed to payment
+            proceedBtn.addEventListener('click', function() {
+                if (!selectedPackage) return;
+                
+                document.getElementById('package-selection').classList.add('hidden');
+                paymentSection.classList.remove('hidden');
+                
+                paymentPackageEl.textContent = `${selectedPackage.amount} SMS`;
+                paymentAmountEl.textContent = `$${selectedPackage.price}`;
+                
+                // Update steps
+                step1.classList.remove('active');
+                step1.classList.add('completed');
+                step2.classList.add('active');
+            });
+            
+            // Make payment
+            makePaymentBtn.addEventListener('click', function() {
+                const phoneNumber = document.getElementById('phone-number').value;
+                const network = document.getElementById('network').value;
+                
+                if (!phoneNumber || !network) {
+                    alert('Please enter your mobile money number and select your network');
+                    return;
+                }
+                
+                // Simulate payment processing
+                setTimeout(function() {
+                    paymentSection.classList.add('hidden');
+                    messageSection.classList.remove('hidden');
+                    
+                    availableSmsEl.textContent = selectedPackage.amount;
+                    
+                    // Update steps
+                    step2.classList.remove('active');
+                    step2.classList.add('completed');
+                    step3.classList.add('active');
+                }, 1000);
+            });
+            
+            // Recipients input
+            recipientsEl.addEventListener('input', function() {
+                const numbers = this.value.split(',').filter(num => num.trim() !== '');
+                recipientCountEl.textContent = numbers.length;
+                recipientsCountEl.textContent = numbers.length;
+                
+                updateMessageCount();
+            });
+            
+            // Message input
+            messageEl.addEventListener('input', function() {
+                charCountEl.textContent = this.value.length;
+                updateMessageCount();
+            });
+            
+            function updateMessageCount() {
+                const message = messageEl.value;
+                const numbers = recipientsEl.value.split(',').filter(num => num.trim() !== '');
+                
+                if (!message || numbers.length === 0) {
+                    messagesToSendEl.textContent = '0';
+                    return;
+                }
+                
+                // Calculate number of SMS needed for the message
+                const smsNeeded = Math.ceil(message.length / 160);
+                messageCount = smsNeeded * numbers.length;
+                
+                messagesToSendEl.textContent = messageCount;
+            }
+            
+            // Send messages
+            sendMessagesBtn.addEventListener('click', function() {
+                if (messageCount > parseInt(selectedPackage.amount)) {
+                    alert(`You're trying to send ${messageCount} messages but your package only includes ${selectedPackage.amount} messages. Please upgrade your package or reduce recipients/message length.`);
+                    return;
+                }
+                
+                if (messageCount === 0) {
+                    alert('Please enter recipients and a message');
+                    return;
+                }
+                
+                // Simulate sending
+                setTimeout(function() {
+                    messageSection.classList.add('hidden');
+                    confirmationSection.classList.remove('hidden');
+                    
+                    const numbers = recipientsEl.value.split(',').filter(num => num.trim() !== '');
+                    
+                    sentCountEl.textContent = messageCount;
+                    sentRecipientsEl.textContent = numbers.length;
+                    sentCostEl.textContent = `$${selectedPackage.price}`;
+                    
+                    // Update steps
+                    step3.classList.remove('active');
+                    step3.classList.add('completed');
+                    step4.classList.add('active');
+                }, 1500);
+            });
+            
+            // Send more messages
+            sendMoreBtn.addEventListener('click', function() {
+                confirmationSection.classList.add('hidden');
+                document.getElementById('package-selection').classList.remove('hidden');
+                
+                // Reset form
+                packageOptions.forEach(opt => opt.classList.remove('selected'));
+                selectedPackage = null;
+                selectedPackageEl.textContent = 'None';
+                unitPriceEl.textContent = '$0.00';
+                totalPriceEl.textContent = '$0.00';
+                proceedBtn.disabled = true;
+                
+                document.getElementById('phone-number').value = '';
+                document.getElementById('network').value = '';
+                recipientsEl.value = '';
+                messageEl.value = '';
+                recipientCountEl.textContent = '0';
+                charCountEl.textContent = '0';
+                messagesToSendEl.textContent = '0';
+                recipientsCountEl.textContent = '0';
+                
+                // Reset steps
+                step1.classList.add('active');
+                step1.classList.remove('completed');
+                step2.classList.remove('active', 'completed');
+                step3.classList.remove('active', 'completed');
+                step4.classList.remove('active');
+            });
+        });
+    </script>
+</body>
+</html>
